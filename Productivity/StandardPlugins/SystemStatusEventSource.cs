@@ -9,7 +9,19 @@ namespace Productivity.StandardPlugins
 {
     public sealed class SystemStatusEventSource : IEventSource
     {
+        private static readonly Dictionary<SessionSwitchReason, string> reasonText = new Dictionary<SessionSwitchReason, string>()
+        {
+            { SessionSwitchReason.SessionLock, "Session Locked" },
+            { SessionSwitchReason.SessionUnlock, "Session Unlocked" },
+            { SessionSwitchReason.RemoteConnect, "Remote Terminal Connected" },
+            { SessionSwitchReason.RemoteDisconnect, "Remote Terminal Disconnected" },
+            { SessionSwitchReason.ConsoleConnect, "Remote Console Connected" },
+            { SessionSwitchReason.ConsoleDisconnect, "Remote Console Disconnected" },
+        };
+
         private SessionSwitchEventHandler hSessionSwitch;
+
+        public event EventHandler<ActionsEventArgs> EventRaised;
 
         public SystemStatusEventSource(string settings)
         {
@@ -17,15 +29,22 @@ namespace Productivity.StandardPlugins
             SystemEvents.SessionSwitch += this.hSessionSwitch;
         }
 
-        private void SystemEvents_SessionSwitch(object sender, Microsoft.Win32.SessionSwitchEventArgs e)
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
-            if (e.Reason == SessionSwitchReason.SessionLock)
+            lock (this)
             {
-                SetStatus("[Workstation Locked]");
+                if (this.EventRaised != null)
+                {
+                    this.EventRaised(this, new ActionsEventArgs(new AddEventAction(new Event(DateTimeOffset.UtcNow, TimeSpan.Zero, reasonText[e.Reason]))));
+                }
             }
-            else if (e.Reason == SessionSwitchReason.SessionUnlock)
+        }
+
+        public void Dispose()
+        {
+            lock (this)
             {
-                SetStatus("[Workstation Unlocked]");
+                SystemEvents.SessionSwitch -= this.hSessionSwitch;
             }
         }
     }

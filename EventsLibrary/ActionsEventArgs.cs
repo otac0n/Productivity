@@ -27,6 +27,28 @@ namespace EventsLibrary
             }
 
             this.actions = actions.ToList().AsReadOnly();
+
+            if (this.actions.Contains(null))
+            {
+                throw new ArgumentNullException("actions");
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ActionsEventArgs class with the specified Actions.
+        /// </summary>
+        /// <param name="actions">The Actions specific to this event.</param>
+        public ActionsEventArgs(EventAction action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            var actions = new List<EventAction>();
+            actions.Add(action);
+
+            this.actions = actions.AsReadOnly();
         }
 
         /// <summary>
