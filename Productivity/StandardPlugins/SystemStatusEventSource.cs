@@ -35,7 +35,7 @@ namespace Productivity.StandardPlugins
             {
                 if (this.EventRaised != null)
                 {
-                    this.EventRaised(this, new ActionsEventArgs(new AddEventAction(new Event(DateTimeOffset.UtcNow, TimeSpan.Zero, reasonText[e.Reason]))));
+                    this.EventRaised(this, new ActionsEventArgs(new AddEventAction(new Event(DateTimeOffset.UtcNow, TimeSpan.Zero, reasonText[e.Reason], this.GetType()))));
                 }
             }
         }

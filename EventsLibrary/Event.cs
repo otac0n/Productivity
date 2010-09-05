@@ -10,12 +10,14 @@ namespace EventsLibrary
         private readonly DateTimeOffset time;
         private readonly TimeSpan duration;
         private readonly string data;
+        private readonly Type type;
 
-        public Event(DateTimeOffset time, TimeSpan duration, string data)
+        public Event(DateTimeOffset time, TimeSpan duration, string data, Type type)
         {
             this.time = time;
             this.duration = duration;
             this.data = data;
+            this.type = type;
         }
 
         public DateTimeOffset Time
@@ -38,7 +40,15 @@ namespace EventsLibrary
         {
             get
             {
-                return data;
+                return this.data;
+            }
+        }
+
+        public Type Type
+        {
+            get
+            {
+                return this.type;
             }
         }
     }

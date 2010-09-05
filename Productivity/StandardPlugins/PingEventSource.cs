@@ -45,8 +45,8 @@
         private IList<EventAction> GetActions(string exitMessage)
         {
             var now = DateTimeOffset.UtcNow;
-            var newRunningEvent = new Event(this.startTime, now - this.startTime, "Application Running");
-            var newTerminatedEvent = new Event(now, TimeSpan.Zero, exitMessage);
+            var newRunningEvent = new Event(this.startTime, now - this.startTime, "Application Running", this.GetType());
+            var newTerminatedEvent = new Event(now, TimeSpan.Zero, exitMessage, this.GetType());
 
             var actions = new List<EventAction>();
             actions.Add(new AddEventAction(newRunningEvent));

@@ -60,11 +60,11 @@ namespace Productivity.StandardPlugins
             if (this.previousEvent == null || this.previousEvent.Time + this.previousEvent.Duration + this.idleTimeSpan < now)
             {
                 this.previousEvent = null;
-                newEvent = new Event(now, TimeSpan.Zero, "Keyboard Active");
+                newEvent = new Event(now, TimeSpan.Zero, "Keyboard Active", this.GetType());
             }
             else
             {
-                newEvent = new Event(this.previousEvent.Time, now - this.previousEvent.Time, "Keyboard Active");
+                newEvent = new Event(this.previousEvent.Time, now - this.previousEvent.Time, "Keyboard Active", this.GetType());
             }
 
             var actions = new List<EventAction>();
