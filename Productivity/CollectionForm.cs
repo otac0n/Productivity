@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Productivity.StandardPlugins;
 using EventsLibrary;
 using System.Collections.Generic;
+using System.Data.Objects;
 
 namespace Productivity
 {
@@ -14,8 +15,8 @@ namespace Productivity
         private EventHandler<ActionsEventArgs> eventRaisedHandle;
 
         private Queue<IList<EventAction>> actionQueue = new Queue<IList<EventAction>>();
-        private Dictionary<Event, Guid> eventIds = new Dictionary<Event, Guid>();
         private System.Threading.Timer queueProcessTimer;
+        private Models.EventsConnection db = new Models.EventsConnection();
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public CollectionForm()
@@ -87,51 +88,76 @@ namespace Productivity
             }
         }
 
-        private void ProcessActions(IList<EventAction> actions)
+        private bool ValidateQueue()
         {
-            using (var db = new Models.EventsConnection())
+            HashSet<Guid> events = new HashSet<Guid>();
+
+            foreach (var item in this.actionQueue)
             {
-                foreach (var action in actions)
+                foreach (var action in item)
                 {
+                    var @event = action.Event;
+
                     if (action is AddEventAction)
                     {
-                        var @event = action.Event;
-
-                        if (!this.eventIds.ContainsKey(@event))
+                        if (events.Contains(@event.Id))
                         {
-                            var id = Guid.NewGuid();
-
-                            var newEvent = new Models.Event
-                            {
-                                EventId = id.ToString(),
-                                Time = @event.Time.UtcDateTime,
-                                Duration = @event.Duration.ToString(),
-                                Type = @event.Type.Name,
-                                Data = @event.Data,
-                            };
-
-                            db.Events.AddObject(newEvent);
-
-                            this.eventIds.Add(@event, id);
+                            return false;
+                        }
+                        else
+                        {
+                            events.Add(@event.Id);
                         }
                     }
                     else if (action is RemoveEventAction)
                     {
-                        var @event = action.Event;
-
-                        if (this.eventIds.ContainsKey(@event))
+                        if (!events.Contains(@event.Id))
                         {
-                            var id = this.eventIds[@event].ToString();
-
-                            var oldEvent = db.Events.Where(e => e.EventId == id).Single();
-                            db.Events.DeleteObject(oldEvent);
-
-                            this.eventIds.Remove(@event);
+                            return false;
+                        }
+                        else
+                        {
+                            events.Remove(@event.Id);
                         }
                     }
-
-                    db.SaveChanges();
                 }
+            }
+
+            return true;
+        }
+
+        private void ProcessActions(IList<EventAction> actions)
+        {
+            lock (this.db)
+            {
+                foreach (var action in actions)
+                {
+                    var @event = action.Event;
+
+                    if (action is AddEventAction)
+                    {
+                        var id = Guid.NewGuid().ToString();
+
+                        var newEvent = new Models.Event
+                        {
+                            EventId = @event.Id.ToString(),
+                            Time = @event.Time.UtcDateTime,
+                            Duration = @event.Duration.ToString(),
+                            Type = @event.Type.Name,
+                            Data = @event.Data,
+                        };
+
+                        db.Events.AddObject(newEvent);
+                    }
+                    else if (action is RemoveEventAction)
+                    {
+                        var id = @event.Id.ToString();
+                        var oldEvent = db.Events.Where(e => e.EventId == id).Single();
+                        db.Events.DeleteObject(oldEvent);
+                    }
+                }
+
+                db.SaveChanges();
             }
         }
     }
