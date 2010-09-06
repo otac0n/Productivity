@@ -33,7 +33,6 @@
             this.SnapshotTimer = new System.Windows.Forms.Timer(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.ScreenshotTimer = new System.Windows.Forms.Timer(this.components);
-            this.QueueProcessTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // SnapshotTimer
@@ -57,11 +56,6 @@
             this.ScreenshotTimer.Enabled = true;
             this.ScreenshotTimer.Interval = 10000;
             // 
-            // QueueProcessTimer
-            // 
-            this.QueueProcessTimer.Enabled = true;
-            this.QueueProcessTimer.Tick += new System.EventHandler(this.QueueProcessTimer_Tick);
-            // 
             // CollectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -80,7 +74,6 @@
         private System.Windows.Forms.Timer SnapshotTimer;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Timer ScreenshotTimer;
-        private System.Windows.Forms.Timer QueueProcessTimer;
     }
 }
 

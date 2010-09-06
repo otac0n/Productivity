@@ -22,7 +22,7 @@ namespace Productivity.StandardPlugins
         public MouseActivitySource(string settings)
         {
             int seconds = 0;
-            seconds = int.TryParse(settings, out seconds) ? seconds : 60;
+            seconds = int.TryParse(settings, out seconds) ? seconds : 20;
             this.idleTimeSpan = TimeSpan.FromSeconds(seconds);
 
             this.MouseProc = new NativeMethods.HookProc(MouseCallback);

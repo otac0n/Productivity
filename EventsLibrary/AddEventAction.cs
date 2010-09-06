@@ -7,28 +7,8 @@ namespace EventsLibrary
 {
     public sealed class AddEventAction : EventAction
     {
-        private Event addEvent;
-
-        public AddEventAction(Event addEvent)
+        public AddEventAction(Event addEvent) : base(addEvent)
         {
-            if (addEvent == null)
-            {
-                throw new ArgumentNullException("addEvent");
-            }
-
-            this.addEvent = addEvent;
-        }
-
-        public Event Event
-        {
-            get
-            {
-                return addEvent;
-            }
-            set
-            {
-                addEvent = value;
-            }
         }
     }
 }

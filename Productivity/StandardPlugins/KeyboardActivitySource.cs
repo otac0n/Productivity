@@ -22,7 +22,7 @@ namespace Productivity.StandardPlugins
         public KeyboardActivitySource(string settings)
         {
             int seconds = 0;
-            seconds = int.TryParse(settings, out seconds) ? seconds : 60;
+            seconds = int.TryParse(settings, out seconds) ? seconds : 30;
             this.idleTimeSpan = TimeSpan.FromSeconds(seconds);
 
             this.KeyboardProc = new NativeMethods.HookProc(KeyboardCallback);

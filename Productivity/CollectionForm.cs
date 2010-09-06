@@ -15,6 +15,7 @@ namespace Productivity
 
         private Queue<IList<EventAction>> actionQueue = new Queue<IList<EventAction>>();
         private Dictionary<Event, Guid> eventIds = new Dictionary<Event, Guid>();
+        private System.Threading.Timer queueProcessTimer;
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public CollectionForm()
@@ -22,6 +23,8 @@ namespace Productivity
             InitializeComponent();
 
             this.eventRaisedHandle = new EventHandler<ActionsEventArgs>(this.Source_EventRaised);
+
+            this.queueProcessTimer = new System.Threading.Timer(this.QueueProcessTimer_Tick, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
 
             var ping = new PingEventSource("1");
             ping.EventRaised += this.eventRaisedHandle;
@@ -64,7 +67,7 @@ namespace Productivity
             }
         }
 
-        private void QueueProcessTimer_Tick(object sender, EventArgs e)
+        private void QueueProcessTimer_Tick(object state)
         {
             while (true)
             {
@@ -92,7 +95,7 @@ namespace Productivity
                 {
                     if (action is AddEventAction)
                     {
-                        var @event = (action as AddEventAction).Event;
+                        var @event = action.Event;
 
                         if (!this.eventIds.ContainsKey(@event))
                         {
@@ -103,7 +106,8 @@ namespace Productivity
                                 EventId = id.ToString(),
                                 Time = @event.Time.UtcDateTime,
                                 Duration = @event.Duration.ToString(),
-                                Type = @event.Type.Name
+                                Type = @event.Type.Name,
+                                Data = @event.Data,
                             };
 
                             db.Events.AddObject(newEvent);
@@ -113,13 +117,13 @@ namespace Productivity
                     }
                     else if (action is RemoveEventAction)
                     {
-                        var @event = (action as RemoveEventAction).Event;
+                        var @event = action.Event;
 
                         if (this.eventIds.ContainsKey(@event))
                         {
-                            var id = this.eventIds[@event];
+                            var id = this.eventIds[@event].ToString();
 
-                            var oldEvent = db.Events.Where(e => e.EventId == id.ToString()).Single();
+                            var oldEvent = db.Events.Where(e => e.EventId == id).Single();
                             db.Events.DeleteObject(oldEvent);
 
                             this.eventIds.Remove(@event);

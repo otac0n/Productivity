@@ -7,28 +7,8 @@ namespace EventsLibrary
 {
     public sealed class RemoveEventAction : EventAction
     {
-        private Event removeEvent;
-
-        public RemoveEventAction(Event removeEvent)
+        public RemoveEventAction(Event removeEvent) : base(removeEvent)
         {
-            if (removeEvent == null)
-            {
-                throw new ArgumentNullException("removeEvent");
-            }
-
-            this.removeEvent = removeEvent;
-        }
-
-        public Event Event
-        {
-            get
-            {
-                return removeEvent;
-            }
-            set
-            {
-                removeEvent = value;
-            }
         }
     }
 }
