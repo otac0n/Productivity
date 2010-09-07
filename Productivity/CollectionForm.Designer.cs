@@ -18,6 +18,28 @@
                 components.Dispose();
             }
 
+            if (disposing && (this.sources != null))
+            {
+                foreach (var source in this.sources)
+                {
+                    source.Dispose();
+                }
+
+                this.sources = null;
+            }
+
+            if (disposing && (this.processor != null))
+            {
+                this.processor.Dispose();
+                this.processor = null;
+            }
+
+            if (disposing && (this.db != null))
+            {
+                this.db.Dispose();
+                this.db = null;
+            }
+
             base.Dispose(disposing);
         }
 

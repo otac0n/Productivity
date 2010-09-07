@@ -13,33 +13,27 @@ namespace Productivity
     public partial class CollectionForm : Form
     {
         private List<IEventSource> sources = new List<IEventSource>();
-        private EventHandler<ActionsEventArgs> eventRaisedHandle;
-
         private Queue<IList<EventAction>> actionQueue = new Queue<IList<EventAction>>();
-        private Thread queueProcessThread;
         private Models.EventsConnection db = new Models.EventsConnection();
+        private QueueProcessor processor;
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public CollectionForm()
         {
+            this.processor = new QueueProcessor(this.actionQueue, this.db);
+
             InitializeComponent();
 
-            this.eventRaisedHandle = new EventHandler<ActionsEventArgs>(this.Source_EventRaised);
-
-            this.queueProcessThread = new Thread(new ThreadStart(this.QueueProcessTimer_Tick));
-            this.queueProcessThread.IsBackground = true;
-            this.queueProcessThread.Start();
-
             var ping = new PingEventSource("1");
-            ping.EventRaised += this.eventRaisedHandle;
+            ping.EventRaised += this.Source_EventRaised;
             this.sources.Add(ping);
 
             var keyboard = new KeyboardActivitySource("10");
-            keyboard.EventRaised += this.eventRaisedHandle;
+            keyboard.EventRaised += this.Source_EventRaised;
             this.sources.Add(keyboard);
 
             var mouse = new MouseActivitySource("3");
-            mouse.EventRaised += this.eventRaisedHandle;
+            mouse.EventRaised += this.Source_EventRaised;
             this.sources.Add(mouse);
         }
 
@@ -48,7 +42,7 @@ namespace Productivity
             lock (this.actionQueue)
             {
                 this.actionQueue.Enqueue(e.Actions);
-                Monitor.Pulse(this.actionQueue);
+                Monitor.PulseAll(this.actionQueue);
             }
         }
 
@@ -69,58 +63,6 @@ namespace Productivity
             if (info != null)
             {
                 SetStatus(info.FileName + ":" + info.ProcessId + " (" + info.Title + ") [" + info.HWnd + "]" + (string.IsNullOrEmpty(info.Location) ? string.Empty : "\r\n" + info.Location));
-            }
-        }
-
-        private void QueueProcessTimer_Tick()
-        {
-            while (true)
-            {
-                IList<EventAction> actions = null;
-
-                lock (this.actionQueue)
-                {
-                    while (this.actionQueue.Count == 0)
-                    {
-                        Monitor.Wait(this.actionQueue);
-                    }
-
-                    actions = this.actionQueue.Dequeue();
-                }
-
-                this.ProcessActions(actions);
-            }
-        }
-
-        private void ProcessActions(IList<EventAction> actions)
-        {
-            lock (this.db)
-            {
-                foreach (var action in actions)
-                {
-                    var @event = action.Event;
-
-                    if (action is AddEventAction)
-                    {
-                        var newEvent = new Models.Event
-                        {
-                            EventId = @event.Id,
-                            Time = @event.Time.UtcDateTime,
-                            Duration = @event.Duration.ToString(),
-                            Type = @event.Type.Name,
-                            Data = @event.Data,
-                        };
-
-                        db.Events.AddObject(newEvent);
-                    }
-                    else if (action is RemoveEventAction)
-                    {
-                        var oldEvent = db.Events.Where(e => e.EventId == @event.Id).Single();
-                        db.Events.DeleteObject(oldEvent);
-                    }
-
-                    db.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
-                }
             }
         }
     }
