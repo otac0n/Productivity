@@ -6,6 +6,7 @@ using Productivity.StandardPlugins;
 using EventsLibrary;
 using System.Collections.Generic;
 using System.Data.Objects;
+using System.Threading;
 
 namespace Productivity
 {
@@ -15,7 +16,7 @@ namespace Productivity
         private EventHandler<ActionsEventArgs> eventRaisedHandle;
 
         private Queue<IList<EventAction>> actionQueue = new Queue<IList<EventAction>>();
-        private System.Threading.Timer queueProcessTimer;
+        private Thread queueProcessThread;
         private Models.EventsConnection db = new Models.EventsConnection();
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -25,7 +26,9 @@ namespace Productivity
 
             this.eventRaisedHandle = new EventHandler<ActionsEventArgs>(this.Source_EventRaised);
 
-            this.queueProcessTimer = new System.Threading.Timer(this.QueueProcessTimer_Tick, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            this.queueProcessThread = new Thread(new ThreadStart(this.QueueProcessTimer_Tick));
+            this.queueProcessThread.IsBackground = true;
+            this.queueProcessThread.Start();
 
             var ping = new PingEventSource("1");
             ping.EventRaised += this.eventRaisedHandle;
@@ -45,6 +48,7 @@ namespace Productivity
             lock (this.actionQueue)
             {
                 this.actionQueue.Enqueue(e.Actions);
+                Monitor.Pulse(this.actionQueue);
             }
         }
 
@@ -68,7 +72,7 @@ namespace Productivity
             }
         }
 
-        private void QueueProcessTimer_Tick(object state)
+        private void QueueProcessTimer_Tick()
         {
             while (true)
             {
@@ -76,9 +80,9 @@ namespace Productivity
 
                 lock (this.actionQueue)
                 {
-                    if (this.actionQueue.Count == 0)
+                    while (this.actionQueue.Count == 0)
                     {
-                        break;
+                        Monitor.Wait(this.actionQueue);
                     }
 
                     actions = this.actionQueue.Dequeue();
@@ -86,44 +90,6 @@ namespace Productivity
 
                 this.ProcessActions(actions);
             }
-        }
-
-        private bool ValidateQueue()
-        {
-            HashSet<Guid> events = new HashSet<Guid>();
-
-            foreach (var item in this.actionQueue)
-            {
-                foreach (var action in item)
-                {
-                    var @event = action.Event;
-
-                    if (action is AddEventAction)
-                    {
-                        if (events.Contains(@event.Id))
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            events.Add(@event.Id);
-                        }
-                    }
-                    else if (action is RemoveEventAction)
-                    {
-                        if (!events.Contains(@event.Id))
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            events.Remove(@event.Id);
-                        }
-                    }
-                }
-            }
-
-            return true;
         }
 
         private void ProcessActions(IList<EventAction> actions)
@@ -136,11 +102,9 @@ namespace Productivity
 
                     if (action is AddEventAction)
                     {
-                        var id = Guid.NewGuid().ToString();
-
                         var newEvent = new Models.Event
                         {
-                            EventId = @event.Id.ToString(),
+                            EventId = @event.Id,
                             Time = @event.Time.UtcDateTime,
                             Duration = @event.Duration.ToString(),
                             Type = @event.Type.Name,
@@ -151,13 +115,12 @@ namespace Productivity
                     }
                     else if (action is RemoveEventAction)
                     {
-                        var id = @event.Id.ToString();
-                        var oldEvent = db.Events.Where(e => e.EventId == id).Single();
+                        var oldEvent = db.Events.Where(e => e.EventId == @event.Id).Single();
                         db.Events.DeleteObject(oldEvent);
                     }
-                }
 
-                db.SaveChanges();
+                    db.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
+                }
             }
         }
     }
