@@ -78,9 +78,7 @@ namespace Productivity
                     }
                 }
 
-                Debug.WriteLine("Moved " + actions.Count + " actions from main queue into worker queue.");
                 actions = this.SimplifyActions(actions);
-                Debug.WriteLine("Simplified to " + actions.Count + " actions.");
 
                 this.ProcessActions(actions);
             }

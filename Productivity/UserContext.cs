@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Productivity
 {
     public static class UserContext
     {
+        private static Dictionary<string, string> ddeTargets = new Dictionary<string, string>()
+        {
+            { "IEXPLORE.EXE", "IExplore" },
+            { "FIREFOX.EXE", "Firefox" },
+        };
+
         private static Dictionary<string, string[][]> pathLookups = new Dictionary<string, string[][]>()
         {
             { "IEXPLORE.EXE", new [] { new [] { "WorkerW" }, new [] { "ReBarWindow32" }, new [] { "ComboBoxEx32" }, new [] { "ComboBox" }, new [] { "Edit" } } },
@@ -35,7 +42,29 @@ namespace Productivity
 
             string location = null;
 
-            if (pathLookups.ContainsKey(fileName))
+            if (ddeTargets.ContainsKey(fileName))
+            {
+                var stopwatch = Stopwatch.StartNew();
+                using (var c = new NDde.Client.DdeClient(ddeTargets[fileName], "WWW_GetWindowInfo"))
+                {
+                    if (c.TryConnect() == 0)
+                    {
+                        try
+                        {
+                            var res = c.Request("0xFFFFFFFF", int.MaxValue);
+                            res = res.TrimEnd('\0');
+                            var parts = res.Split(',');
+                            location = parts[0].Trim('\"');
+                            Debug.WriteLine("DDE Location: " + location + " (" + stopwatch.ElapsedMilliseconds + "ms)");
+                        }
+                        catch (NDde.DdeException)
+                        {
+                        }
+                    }
+                }
+            }
+
+            if (pathLookups.ContainsKey(fileName) && string.IsNullOrEmpty(location))
             {
                 location = LookupText(hActive, IntPtr.Zero, pathLookups[fileName], 0, 0);
             }

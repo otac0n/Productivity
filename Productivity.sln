@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Productivity", "Productivit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsLibrary", "EventsLibrary\EventsLibrary.csproj", "{4CFB99C0-C3A1-4DF0-8874-736DFF4F6C35}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E186837D-7BEF-4E61-9302-56452FE3C91F}"
+	ProjectSection(SolutionItems) = preProject
+		NDde.dll = NDde.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
