@@ -16,11 +16,6 @@ namespace Productivity
             { "FIREFOX.EXE", "Firefox" },
         };
 
-        private static Dictionary<string, string[][]> pathLookups = new Dictionary<string, string[][]>()
-        {
-            { "IEXPLORE.EXE", new [] { new [] { "WorkerW" }, new [] { "ReBarWindow32" }, new [] { "ComboBoxEx32" }, new [] { "ComboBox" }, new [] { "Edit" } } },
-        };
-
         public static ContextInfo GetUserContextInfo()
         {
             IntPtr hActive = NativeMethods.GetForegroundWindow();
@@ -45,28 +40,26 @@ namespace Productivity
             if (ddeTargets.ContainsKey(fileName))
             {
                 var stopwatch = Stopwatch.StartNew();
-                using (var c = new NDde.Client.DdeClient(ddeTargets[fileName], "WWW_GetWindowInfo"))
+                try
                 {
-                    if (c.TryConnect() == 0)
+                    using (var c = new NDde.Client.DdeClient(ddeTargets[fileName], "WWW_GetWindowInfo"))
                     {
-                        try
+                        if (c.TryConnect() == 0)
                         {
                             var res = c.Request("0xFFFFFFFF", int.MaxValue);
-                            res = res.TrimEnd('\0');
-                            var parts = res.Split(',');
-                            location = parts[0].Trim('\"');
-                            Debug.WriteLine("DDE Location: " + location + " (" + stopwatch.ElapsedMilliseconds + "ms)");
-                        }
-                        catch (NDde.DdeException)
-                        {
+                            if (res != null)
+                            {
+                                res = res.TrimEnd('\0');
+                                var parts = res.Split(',');
+                                location = parts[0].Trim('\"');
+                                Debug.WriteLine("DDE Location: " + location + " (" + stopwatch.ElapsedMilliseconds + "ms)");
+                            }
                         }
                     }
                 }
-            }
-
-            if (pathLookups.ContainsKey(fileName) && string.IsNullOrEmpty(location))
-            {
-                location = LookupText(hActive, IntPtr.Zero, pathLookups[fileName], 0, 0);
+                catch (NDde.DdeException)
+                {
+                }
             }
 
             return new ContextInfo
