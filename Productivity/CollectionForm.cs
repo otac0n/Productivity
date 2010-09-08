@@ -49,25 +49,5 @@ namespace Productivity
                 Monitor.PulseAll(this.actionQueue);
             }
         }
-
-        private string prev = null;
-
-        private void SetStatus(string status)
-        {
-            if (status != prev)
-            {
-                this.textBox1.AppendText(status + "\r\n");
-                prev = status;
-            }
-        }
-
-        private void SnapshotTimer_Tick(object sender, EventArgs e)
-        {
-            var info = UserContext.GetUserContextInfo();
-            if (info != null)
-            {
-                SetStatus(info.FileName + ":" + info.ProcessId + " (" + info.Title + ") [" + info.HWnd + "]" + (string.IsNullOrEmpty(info.Location) ? string.Empty : "\r\n" + info.Location));
-            }
-        }
     }
 }
