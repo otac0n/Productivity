@@ -83,7 +83,7 @@
     <Compile Include="StandardPlugins\KeyboardActivitySource.cs" />
     <Compile Include="StandardPlugins\PingEventSource.cs" />
     <Compile Include="StandardPlugins\PingEventSourceFactory.cs" />
-    <Compile Include="StandardPlugins\SystemStatusEventSource.cs" />
+    <Compile Include="StandardPlugins\SystemStatusSource.cs" />
     <Compile Include="UserContext.cs" />
     <EmbeddedResource Include="CollectionForm.resx">
       <DependentUpon>CollectionForm.cs</DependentUpon>

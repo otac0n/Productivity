@@ -35,6 +35,10 @@ namespace Productivity
             var mouse = new MouseActivitySource("3");
             mouse.EventRaised += this.Source_EventRaised;
             this.sources.Add(mouse);
+
+            var sys = new SystemStatusSource();
+            sys.EventRaised += this.Source_EventRaised;
+            this.sources.Add(sys);
         }
 
         private void Source_EventRaised(object sender, ActionsEventArgs e)

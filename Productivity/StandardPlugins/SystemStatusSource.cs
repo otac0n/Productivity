@@ -7,7 +7,7 @@ using Microsoft.Win32;
 
 namespace Productivity.StandardPlugins
 {
-    public sealed class SystemStatusEventSource : IEventSource
+    public sealed class SystemStatusSource : IEventSource
     {
         private static readonly Dictionary<SessionSwitchReason, string> reasonText = new Dictionary<SessionSwitchReason, string>()
         {
@@ -23,7 +23,7 @@ namespace Productivity.StandardPlugins
 
         public event EventHandler<ActionsEventArgs> EventRaised;
 
-        public SystemStatusEventSource(string settings)
+        public SystemStatusSource()
         {
             this.hSessionSwitch = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
             SystemEvents.SessionSwitch += this.hSessionSwitch;
