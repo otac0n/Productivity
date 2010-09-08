@@ -78,7 +78,7 @@ namespace Productivity.StandardPlugins
                 actions.Add(new RemoveEventAction(this.previousId));
             }
 
-            actions.Add(new AddEventAction(id, newEvent));
+            actions.Add(new UpdateEventAction(id, newEvent));
 
             this.previousId = id;
             this.previousEvent = newEvent;

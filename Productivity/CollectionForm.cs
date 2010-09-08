@@ -41,7 +41,7 @@ namespace Productivity
         {
             lock (this.actionQueue)
             {
-                this.actionQueue.Enqueue(e.Actions);
+                this.actionQueue.Enqueue(e.Actions.ToList().AsReadOnly());
                 Monitor.PulseAll(this.actionQueue);
             }
         }

@@ -37,7 +37,7 @@ namespace Productivity.StandardPlugins
                 {
                     var id = Guid.NewGuid();
                     var data = new EventData(DateTimeOffset.UtcNow, TimeSpan.Zero, reasonText[e.Reason], this.GetType());
-                    var action = new AddEventAction(id, data);
+                    var action = new UpdateEventAction(id, data);
 
                     this.EventRaised(this, new ActionsEventArgs(action));
                 }

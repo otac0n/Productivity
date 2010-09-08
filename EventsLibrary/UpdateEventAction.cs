@@ -5,11 +5,11 @@ using System.Text;
 
 namespace EventsLibrary
 {
-    public sealed class AddEventAction : EventAction
+    public sealed class UpdateEventAction : EventAction
     {
         private readonly EventData eventData;
 
-        public AddEventAction(Guid id, EventData eventData) : base(id)
+        public UpdateEventAction(Guid id, EventData eventData) : base(id)
         {
             if (eventData == null)
             {

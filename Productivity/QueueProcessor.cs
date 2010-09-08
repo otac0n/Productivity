@@ -88,42 +88,14 @@ namespace Productivity
 
         private IList<EventAction> SimplifyActions(IList<EventAction> actions)
         {
-            var set = new Dictionary<Guid, IList<EventAction>>();
+            var set = new Dictionary<Guid, EventAction>();
 
             foreach (var action in actions)
             {
-                if (!set.ContainsKey(action.Id))
-                {
-                    set.Add(action.Id, new List<EventAction>());
-                }
-
-                var list = set[action.Id];
-
-                if (action is RemoveEventAction)
-                {
-                    list.Clear();
-                    list.Add(action);
-                }
-                else if (action is AddEventAction)
-                {
-                    if (list.Count == 0 || list[list.Count - 1] is RemoveEventAction)
-                    {
-                        list.Add(action);
-                    }
-                }
+                set[action.Id] = action;
             }
 
-            var results = new List<EventAction>();
-
-            foreach (var key in set.Keys)
-            {
-                foreach (var action in set[key])
-                {
-                    results.Add(action);
-                }
-            }
-
-            return results;
+            return set.Values.ToList();
         }
 
         private void ProcessActions(IList<EventAction> actions)
@@ -132,12 +104,14 @@ namespace Productivity
             {
                 foreach (var action in actions)
                 {
-                    if (action is AddEventAction)
-                    {
-                        if (db.Events.Where(e => e.EventId == action.Id).Any())
-                        {
-                            var data = (action as AddEventAction).EventData;
+                    var oldEvent = db.Events.Where(e => e.EventId == action.Id).SingleOrDefault();
 
+                    if (action is UpdateEventAction)
+                    {
+                        var data = (action as UpdateEventAction).EventData;
+
+                        if (oldEvent == null)
+                        {
                             var newEvent = new Models.Event
                             {
                                 EventId = action.Id,
@@ -149,13 +123,23 @@ namespace Productivity
 
                             db.Events.AddObject(newEvent);
                         }
+                        else
+                        {
+                            oldEvent.Time = data.Time.UtcDateTime;
+                            oldEvent.Duration = data.Duration.ToString();
+                            oldEvent.Type = data.Type.Name;
+                            oldEvent.Data = data.Data;
+                        }
                     }
                     else if (action is RemoveEventAction)
                     {
-                        var oldEvent = db.Events.Where(e => e.EventId == action.Id).SingleOrDefault();
                         if (oldEvent != null)
                         {
                             db.Events.DeleteObject(oldEvent);
+                        }
+                        else
+                        {
+                            // Take no action.
                         }
                     }
 

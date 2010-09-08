@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="EventAction.cs" />
     <Compile Include="ActionsEventArgs.cs" />
-    <Compile Include="AddEventAction.cs" />
+    <Compile Include="UpdateEventAction.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="IEventSource.cs" />
     <Compile Include="IEventSourceFactory.cs" />
