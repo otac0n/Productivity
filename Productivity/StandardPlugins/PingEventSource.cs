@@ -9,8 +9,8 @@
     {
         private readonly DateTimeOffset startTime;
 
-        private Event previousRunningEvent;
-        private Event previousTerminatedEvent;
+        private readonly Guid runningEventId = Guid.NewGuid();
+        private readonly Guid terminatedEventId = Guid.NewGuid();
 
         private Timer timer;
 
@@ -45,21 +45,14 @@
         private IList<EventAction> GetActions(string exitMessage)
         {
             var now = DateTimeOffset.UtcNow;
-            var newRunningEvent = new Event(this.startTime, now - this.startTime, "Application Running", this.GetType());
-            var newTerminatedEvent = new Event(now, TimeSpan.Zero, exitMessage, this.GetType());
+            var newRunningEvent = new EventData(this.startTime, now - this.startTime, "Application Running", this.GetType());
+            var newTerminatedEvent = new EventData(now, TimeSpan.Zero, exitMessage, this.GetType());
 
             var actions = new List<EventAction>();
-            actions.Add(new AddEventAction(newRunningEvent));
-            actions.Add(new AddEventAction(newTerminatedEvent));
-
-            if (this.previousRunningEvent != null)
-            {
-                actions.Add(new RemoveEventAction(this.previousRunningEvent));
-                actions.Add(new RemoveEventAction(this.previousTerminatedEvent));
-            }
-
-            this.previousRunningEvent = newRunningEvent;
-            this.previousTerminatedEvent = newTerminatedEvent;
+            actions.Add(new RemoveEventAction(this.runningEventId));
+            actions.Add(new RemoveEventAction(this.terminatedEventId));
+            actions.Add(new AddEventAction(this.runningEventId, newRunningEvent));
+            actions.Add(new AddEventAction(this.terminatedEventId, newTerminatedEvent));
 
             return actions;
         }

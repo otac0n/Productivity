@@ -7,7 +7,7 @@ namespace EventsLibrary
 {
     public sealed class RemoveEventAction : EventAction
     {
-        public RemoveEventAction(Event removeEvent) : base(removeEvent)
+        public RemoveEventAction(Guid id) : base(id)
         {
         }
     }

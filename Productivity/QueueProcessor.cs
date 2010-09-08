@@ -35,6 +35,7 @@ namespace Productivity
             this.db = db;
 
             this.processThread = new Thread(this.Run);
+            this.processThread.Name = "Queue Processor";
             this.processThread.IsBackground = true;
             this.processThread.Start();
         }
@@ -52,28 +53,77 @@ namespace Productivity
 
         private void Run()
         {
-            while (this.running)
+            while (true)
             {
-                IList<EventAction> actions = null;
+                IList<EventAction> actions = new List<EventAction>();
 
                 lock (this.actionQueue)
                 {
+                    if (!this.running && this.actionQueue.Count == 0)
+                    {
+                        break;
+                    }
+
                     while (this.actionQueue.Count == 0 && this.running)
                     {
                         Monitor.Wait(this.actionQueue);
                     }
 
-                    if (this.running)
+                    while (this.actionQueue.Count != 0)
                     {
-                       actions = this.actionQueue.Dequeue();
+                        foreach (var action in this.actionQueue.Dequeue())
+                        {
+                            actions.Add(action);
+                        }
                     }
                 }
 
-                if (actions != null)
+                Debug.WriteLine("Moved " + actions.Count + " actions from main queue into worker queue.");
+                actions = this.SimplifyActions(actions);
+                Debug.WriteLine("Simplified to " + actions.Count + " actions.");
+
+                this.ProcessActions(actions);
+            }
+        }
+
+        private IList<EventAction> SimplifyActions(IList<EventAction> actions)
+        {
+            var set = new Dictionary<Guid, IList<EventAction>>();
+
+            foreach (var action in actions)
+            {
+                if (!set.ContainsKey(action.Id))
                 {
-                    this.ProcessActions(actions);
+                    set.Add(action.Id, new List<EventAction>());
+                }
+
+                var list = set[action.Id];
+
+                if (action is RemoveEventAction)
+                {
+                    list.Clear();
+                    list.Add(action);
+                }
+                else if (action is AddEventAction)
+                {
+                    if (list.Count == 0 || list[list.Count - 1] is RemoveEventAction)
+                    {
+                        list.Add(action);
+                    }
                 }
             }
+
+            var results = new List<EventAction>();
+
+            foreach (var key in set.Keys)
+            {
+                foreach (var action in set[key])
+                {
+                    results.Add(action);
+                }
+            }
+
+            return results;
         }
 
         private void ProcessActions(IList<EventAction> actions)
@@ -82,29 +132,31 @@ namespace Productivity
             {
                 foreach (var action in actions)
                 {
-                    var @event = action.Event;
-
                     if (action is AddEventAction)
                     {
-                        Debug.WriteLine("+ " + @event.Id.ToString());
-
-                        var newEvent = new Models.Event
+                        if (db.Events.Where(e => e.EventId == action.Id).Any())
                         {
-                            EventId = @event.Id,
-                            Time = @event.Time.UtcDateTime,
-                            Duration = @event.Duration.ToString(),
-                            Type = @event.Type.Name,
-                            Data = @event.Data,
-                        };
+                            var data = (action as AddEventAction).EventData;
 
-                        db.Events.AddObject(newEvent);
+                            var newEvent = new Models.Event
+                            {
+                                EventId = action.Id,
+                                Time = data.Time.UtcDateTime,
+                                Duration = data.Duration.ToString(),
+                                Type = data.Type.Name,
+                                Data = data.Data,
+                            };
+
+                            db.Events.AddObject(newEvent);
+                        }
                     }
                     else if (action is RemoveEventAction)
                     {
-                        Debug.WriteLine("- " + @event.Id.ToString());
-
-                        var oldEvent = db.Events.Where(e => e.EventId == @event.Id).Single();
-                        db.Events.DeleteObject(oldEvent);
+                        var oldEvent = db.Events.Where(e => e.EventId == action.Id).SingleOrDefault();
+                        if (oldEvent != null)
+                        {
+                            db.Events.DeleteObject(oldEvent);
+                        }
                     }
 
                     db.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);

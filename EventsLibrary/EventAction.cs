@@ -7,27 +7,27 @@ namespace EventsLibrary
 {
     public abstract class EventAction
     {
-        private Event @event;
+        private Guid id;
 
-        public EventAction(Event @event)
+        public EventAction(Guid id)
         {
-            if (@event == null)
+            if (id == Guid.Empty)
             {
-                throw new ArgumentNullException("event");
+                throw new ArgumentNullException("id");
             }
 
-            this.@event = @event;
+            this.id = id;
         }
 
-        public Event Event
+        public Guid Id
         {
             get
             {
-                return this.@event;
+                return this.id;
             }
             set
             {
-                this.@event = value;
+                this.id = value;
             }
         }
     }

@@ -7,8 +7,24 @@ namespace EventsLibrary
 {
     public sealed class AddEventAction : EventAction
     {
-        public AddEventAction(Event addEvent) : base(addEvent)
+        private readonly EventData eventData;
+
+        public AddEventAction(Guid id, EventData eventData) : base(id)
         {
+            if (eventData == null)
+            {
+                throw new ArgumentNullException("eventData");
+            }
+
+            this.eventData = eventData;
+        }
+
+        public EventData EventData
+        {
+            get
+            {
+                return this.eventData;
+            }
         }
     }
 }

@@ -11,7 +11,8 @@ namespace Productivity.StandardPlugins
     public sealed class MouseActivitySource : IEventSource
     {
         private readonly TimeSpan idleTimeSpan;
-        private Event previousEvent;
+        private Guid previousId;
+        private EventData previousEvent;
 
         private IntPtr hMouseHook;
         private NativeMethods.HookProc MouseProc;
@@ -55,26 +56,31 @@ namespace Productivity.StandardPlugins
         private IList<EventAction> GetActions()
         {
             var now = DateTimeOffset.UtcNow;
-            Event newEvent;
+            EventData newEvent;
+            Guid id;
 
             if (this.previousEvent == null || this.previousEvent.Time + this.previousEvent.Duration + this.idleTimeSpan < now)
             {
                 this.previousEvent = null;
-                newEvent = new Event(now, TimeSpan.Zero, "Mouse Active", this.GetType());
+                id = Guid.NewGuid();
+                newEvent = new EventData(now, TimeSpan.Zero, "Mouse Active", this.GetType());
             }
             else
             {
-                newEvent = new Event(this.previousEvent.Time, now - this.previousEvent.Time, "Mouse Active", this.GetType());
+                id = this.previousId;
+                newEvent = new EventData(this.previousEvent.Time, now - this.previousEvent.Time, "Mouse Active", this.GetType());
             }
 
             var actions = new List<EventAction>();
-            actions.Add(new AddEventAction(newEvent));
 
             if (this.previousEvent != null)
             {
-                actions.Add(new RemoveEventAction(this.previousEvent));
+                actions.Add(new RemoveEventAction(this.previousId));
             }
 
+            actions.Add(new AddEventAction(id, newEvent));
+
+            this.previousId = id;
             this.previousEvent = newEvent;
 
             return actions;
