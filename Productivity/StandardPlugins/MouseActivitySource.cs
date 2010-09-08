@@ -61,7 +61,6 @@ namespace Productivity.StandardPlugins
 
             if (this.previousEvent == null || this.previousEvent.Time + this.previousEvent.Duration + this.idleTimeSpan < now)
             {
-                this.previousEvent = null;
                 id = Guid.NewGuid();
                 newEvent = new EventData(now, TimeSpan.Zero, "Mouse Active", this.GetType());
             }
@@ -72,12 +71,6 @@ namespace Productivity.StandardPlugins
             }
 
             var actions = new List<EventAction>();
-
-            if (this.previousEvent != null)
-            {
-                actions.Add(new RemoveEventAction(this.previousId));
-            }
-
             actions.Add(new UpdateEventAction(id, newEvent));
 
             this.previousId = id;
