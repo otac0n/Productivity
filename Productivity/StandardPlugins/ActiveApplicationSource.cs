@@ -24,6 +24,15 @@ namespace Productivity.StandardPlugins
             var info = UserContext.GetUserContextInfo();
             if (info != null)
             {
+                var data = "Active Application: " + info.Title + "\n" +
+                    "hWnd: " + info.HWnd + "\n" +
+                    "Filename: " + info.FileName + "\n" +
+                    "Location: " + info.Location + "\n" +
+                    "Process: " + info.ProcessId;
+
+                Console.WriteLine(data);
+                Console.WriteLine("--------");
+
                 //SetStatus(info.FileName + ":" + info.ProcessId + " (" + info.Title + ") [" + info.HWnd + "]" + (string.IsNullOrEmpty(info.Location) ? string.Empty : "\r\n" + info.Location));
             }
         }

@@ -72,7 +72,8 @@
     <Compile Include="CollectionForm.Designer.cs">
       <DependentUpon>CollectionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ContextInfo.cs" />
+    <Compile Include="StandardPlugins\ContextInfo.cs" />
+    <Compile Include="StandardPlugins\LocationSource.cs" />
     <Compile Include="Models\Events.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,7 +89,7 @@
     <Compile Include="StandardPlugins\PingEventSource.cs" />
     <Compile Include="StandardPlugins\PingEventSourceFactory.cs" />
     <Compile Include="StandardPlugins\SystemStatusSource.cs" />
-    <Compile Include="UserContext.cs" />
+    <Compile Include="StandardPlugins\UserContext.cs" />
     <EmbeddedResource Include="CollectionForm.resx">
       <DependentUpon>CollectionForm.cs</DependentUpon>
     </EmbeddedResource>

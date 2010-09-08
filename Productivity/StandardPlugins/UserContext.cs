@@ -6,7 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace Productivity
+namespace Productivity.StandardPlugins
 {
     public static class UserContext
     {
@@ -14,6 +14,16 @@ namespace Productivity
         {
             { "IEXPLORE.EXE", "IExplore" },
             { "FIREFOX.EXE", "Firefox" },
+            { "OPERA.EXE", "Opera" },
+
+            { "NETSCAPE.EXE", "Netscape" },
+            { "MOSAIC.EXE", "Mosaic" },
+        };
+
+        private static Dictionary<string, string[][]> pathLookups = new Dictionary<string, string[][]>()
+        {
+            { "CHROME.EXE", new [] { new [] { "Chrome_AutocompleteEditView" } } },
+            { "SAFARI.EXE", new [] { new [] { "RootElement" }, new [] { "SafariEdit" }, new [] { "WebKitEdit" }  } },
         };
 
         public static ContextInfo GetUserContextInfo()
@@ -34,15 +44,17 @@ namespace Productivity
             StringBuilder filePath = new StringBuilder(4096);
             NativeMethods.GetProcessImageFileName(hProcess, filePath, filePath.Capacity);
             var fileName = Path.GetFileName(filePath.ToString()).ToUpperInvariant();
+            var fileNameKey = fileName.ToUpperInvariant();
 
             string location = null;
+            LocationSource locationSource = LocationSource.None;
 
-            if (ddeTargets.ContainsKey(fileName))
+            if (ddeTargets.ContainsKey(fileNameKey))
             {
-                var stopwatch = Stopwatch.StartNew();
+                locationSource = LocationSource.DDE;
                 try
                 {
-                    using (var c = new NDde.Client.DdeClient(ddeTargets[fileName], "WWW_GetWindowInfo"))
+                    using (var c = new NDde.Client.DdeClient(ddeTargets[fileNameKey], "WWW_GetWindowInfo"))
                     {
                         if (c.TryConnect() == 0)
                         {
@@ -52,7 +64,6 @@ namespace Productivity
                                 res = res.TrimEnd('\0');
                                 var parts = res.Split(',');
                                 location = parts[0].Trim('\"');
-                                Debug.WriteLine("DDE Location: " + location + " (" + stopwatch.ElapsedMilliseconds + "ms)");
                             }
                         }
                     }
@@ -60,6 +71,11 @@ namespace Productivity
                 catch (NDde.DdeException)
                 {
                 }
+            }
+            else if (pathLookups.ContainsKey(fileNameKey) && string.IsNullOrEmpty(location))
+            {
+                locationSource = LocationSource.Typed;
+                location = LookupText(hActive, IntPtr.Zero, pathLookups[fileNameKey], 0, 0);
             }
 
             return new ContextInfo
@@ -69,6 +85,7 @@ namespace Productivity
                 Title = title.ToString(),
                 ProcessId = pId,
                 Location = location,
+                LocationSource = locationSource,
             };
         }
 
