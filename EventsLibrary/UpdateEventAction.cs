@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace EventsLibrary
+﻿namespace EventsLibrary
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public sealed class UpdateEventAction : EventAction
     {
         private readonly EventData eventData;
