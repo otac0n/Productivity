@@ -6,7 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace Productivity.StandardPlugins
+namespace Productivity.ActiveApplicationAddIn
 {
     public static class UserContext
     {

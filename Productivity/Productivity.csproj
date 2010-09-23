@@ -49,9 +49,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NDde">
-      <HintPath>..\NDde.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
@@ -72,8 +69,6 @@
     <Compile Include="CollectionForm.Designer.cs">
       <DependentUpon>CollectionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StandardPlugins\ContextInfo.cs" />
-    <Compile Include="StandardPlugins\LocationSource.cs" />
     <Compile Include="Models\Events.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -83,13 +78,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueProcessor.cs" />
-    <Compile Include="StandardPlugins\ActiveApplicationSource.cs" />
     <Compile Include="StandardPlugins\MouseActivitySource.cs" />
     <Compile Include="StandardPlugins\KeyboardActivitySource.cs" />
     <Compile Include="StandardPlugins\PingEventSource.cs" />
-    <Compile Include="StandardPlugins\PingEventSourceFactory.cs" />
     <Compile Include="StandardPlugins\SystemStatusSource.cs" />
-    <Compile Include="StandardPlugins\UserContext.cs" />
     <EmbeddedResource Include="CollectionForm.resx">
       <DependentUpon>CollectionForm.cs</DependentUpon>
     </EmbeddedResource>

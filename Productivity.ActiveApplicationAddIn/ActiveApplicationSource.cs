@@ -6,7 +6,7 @@ using EventsLibrary;
 using Microsoft.Win32;
 using System.Threading;
 
-namespace Productivity.StandardPlugins
+namespace Productivity.ActiveApplicationAddIn
 {
     public sealed class ActiveApplicationSource : IEventSource
     {

@@ -27,22 +27,6 @@ namespace Productivity
             var ping = new PingEventSource("1");
             ping.EventRaised += this.Source_EventRaised;
             this.sources.Add(ping);
-
-            //var keyboard = new KeyboardActivitySource("10");
-            //keyboard.EventRaised += this.Source_EventRaised;
-            //this.sources.Add(keyboard);
-
-            //var mouse = new MouseActivitySource("3");
-            //mouse.EventRaised += this.Source_EventRaised;
-            //this.sources.Add(mouse);
-
-            //var sys = new SystemStatusSource();
-            //sys.EventRaised += this.Source_EventRaised;
-            //this.sources.Add(sys);
-
-            var app = new ActiveApplicationSource();
-            app.EventRaised += this.Source_EventRaised;
-            this.sources.Add(app);
         }
 
         private void Source_EventRaised(object sender, ActionsEventArgs e)
