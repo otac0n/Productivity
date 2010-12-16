@@ -53,14 +53,18 @@
         /// <returns>The plugin factories contained in the assembly, if the load was successful; null, otherwise.</returns>
         public static IEnumerable<IPluginFactory> LoadPlugins(string fileName)
         {
-            if (!File.Exists(fileName))
-            {
-                throw new LoadPluginsFailureException("Unable to load plugins:  The file '" + fileName + "' could not be found.");
-            }
-
             try
             {
-                return LoadPlugins(File.ReadAllBytes(fileName));
+                var assemblyName = Assembly.ReflectionOnlyLoadFrom(fileName).GetName();
+                var key = assemblyName.GetPublicKey();
+                if (key.Length == 0)
+                {
+                    throw new LoadPluginsFailureException("Unable to load plugins: The assembly '" + assemblyName.FullName + "' was not signed.");
+                }
+
+                var assembly = Assembly.Load(assemblyName);
+
+                return LoadPlugins(assembly);
             }
             catch (IOException ex)
             {
@@ -79,7 +83,6 @@
             {
                 var assemblyName = Assembly.ReflectionOnlyLoad(rawAssembly).GetName();
                 var key = assemblyName.GetPublicKey();
-
                 if (key.Length == 0)
                 {
                     throw new LoadPluginsFailureException("Unable to load plugins: The assembly '" + assemblyName.FullName + "' was not signed.");
