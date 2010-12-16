@@ -13,7 +13,8 @@
             <PropertyRef Name="EventId" />
           </Key>
           <Property Name="EventId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
           <Property Name="Duration" Type="nvarchar" Nullable="false" MaxLength="25" />
           <Property Name="Type" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="Data" Type="nvarchar" Nullable="false" MaxLength="1024" />
@@ -30,7 +31,8 @@
             <PropertyRef Name="EventId" />
           </Key>
           <Property Type="Guid" Name="EventId" Nullable="false" />
-          <Property Type="DateTime" Name="Time" Nullable="false" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" />
           <Property Type="String" Name="Duration" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Type" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Data" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="true" />
@@ -47,7 +49,8 @@
                 <ScalarProperty Name="Data" ColumnName="Data" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -73,7 +76,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="Model1" >
-        <EntityTypeShape EntityType="Productivity.Models.Event" Width="1.5" PointX="0.75" PointY="0.75" Height="1.9802864583333331" />
+        <EntityTypeShape EntityType="Productivity.Models.Event" Width="1.5" PointX="0.75" PointY="0.75" Height="2.172587890625" />
       </Diagram>
     </Diagrams>
   </Designer>

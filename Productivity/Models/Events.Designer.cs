@@ -114,18 +114,20 @@ namespace Productivity.Models
         /// Create a new Event object.
         /// </summary>
         /// <param name="eventId">Initial value of the EventId property.</param>
-        /// <param name="time">Initial value of the Time property.</param>
+        /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="duration">Initial value of the Duration property.</param>
         /// <param name="type">Initial value of the Type property.</param>
         /// <param name="data">Initial value of the Data property.</param>
-        public static Event CreateEvent(global::System.Guid eventId, global::System.DateTime time, global::System.String duration, global::System.String type, global::System.String data)
+        /// <param name="endTime">Initial value of the EndTime property.</param>
+        public static Event CreateEvent(global::System.Guid eventId, global::System.DateTime startTime, global::System.String duration, global::System.String type, global::System.String data, global::System.DateTime endTime)
         {
             Event @event = new Event();
             @event.EventId = eventId;
-            @event.Time = time;
+            @event.StartTime = startTime;
             @event.Duration = duration;
             @event.Type = type;
             @event.Data = data;
+            @event.EndTime = endTime;
             return @event;
         }
 
@@ -164,24 +166,24 @@ namespace Productivity.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.DateTime Time
+        public global::System.DateTime StartTime
         {
             get
             {
-                return _Time;
+                return _StartTime;
             }
             set
             {
-                OnTimeChanging(value);
-                ReportPropertyChanging("Time");
-                _Time = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Time");
-                OnTimeChanged();
+                OnStartTimeChanging(value);
+                ReportPropertyChanging("StartTime");
+                _StartTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartTime");
+                OnStartTimeChanged();
             }
         }
-        private global::System.DateTime _Time;
-        partial void OnTimeChanging(global::System.DateTime value);
-        partial void OnTimeChanged();
+        private global::System.DateTime _StartTime;
+        partial void OnStartTimeChanging(global::System.DateTime value);
+        partial void OnStartTimeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -254,6 +256,30 @@ namespace Productivity.Models
         private global::System.String _Data;
         partial void OnDataChanging(global::System.String value);
         partial void OnDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime EndTime
+        {
+            get
+            {
+                return _EndTime;
+            }
+            set
+            {
+                OnEndTimeChanging(value);
+                ReportPropertyChanging("EndTime");
+                _EndTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndTime");
+                OnEndTimeChanged();
+            }
+        }
+        private global::System.DateTime _EndTime;
+        partial void OnEndTimeChanging(global::System.DateTime value);
+        partial void OnEndTimeChanged();
 
         #endregion
     

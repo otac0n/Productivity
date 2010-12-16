@@ -113,7 +113,8 @@ namespace Productivity
                             var newEvent = new Models.Event
                             {
                                 EventId = action.Id,
-                                Time = data.Time.UtcDateTime,
+                                StartTime = data.Time.UtcDateTime,
+                                EndTime = data.Time.UtcDateTime.Add(data.Duration),
                                 Duration = data.Duration.ToString(),
                                 Type = data.Type.Name,
                                 Data = data.Data,
@@ -123,7 +124,8 @@ namespace Productivity
                         }
                         else
                         {
-                            oldEvent.Time = data.Time.UtcDateTime;
+                            oldEvent.StartTime = data.Time.UtcDateTime;
+                            oldEvent.EndTime = data.Time.UtcDateTime.Add(data.Duration);
                             oldEvent.Duration = data.Duration.ToString();
                             oldEvent.Type = data.Type.Name;
                             oldEvent.Data = data.Data;
