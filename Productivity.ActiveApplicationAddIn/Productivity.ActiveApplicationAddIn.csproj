@@ -37,7 +37,7 @@
     <AssemblyOriginatorKeyFile>..\Productivity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NDde">
+    <Reference Include="NDde, Version=2.1.563.0, Culture=neutral, PublicKeyToken=99936772da3a0793, processorArchitecture=MSIL">
       <HintPath>..\NDde.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveApplicationSource.cs" />
+    <Compile Include="ActiveApplicationSourceFactory.cs" />
+    <Compile Include="AssemblyPluginEnumerator.cs" />
     <Compile Include="ContextInfo.cs" />
     <Compile Include="LocationSource.cs" />
     <Compile Include="NativeMethods.cs" />

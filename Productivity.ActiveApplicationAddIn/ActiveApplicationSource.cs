@@ -14,26 +14,31 @@ namespace Productivity.ActiveApplicationAddIn
 
         public event EventHandler<ActionsEventArgs> EventRaised;
 
-        public ActiveApplicationSource()
+        public ActiveApplicationSource(string settings)
         {
             this.timer = new Timer(SnapshotTimer_Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
 
         private void SnapshotTimer_Tick(object state)
         {
-            var info = UserContext.GetUserContextInfo();
-            if (info != null)
+            var e = this.EventRaised;
+            if (e != null)
             {
-                var data = "Active Application: " + info.Title + "\n" +
-                    "hWnd: " + info.HWnd + "\n" +
-                    "Filename: " + info.FileName + "\n" +
-                    "Location: " + info.Location + "\n" +
-                    "Process: " + info.ProcessId;
+                var info = UserContext.GetUserContextInfo();
+                if (info != null)
+                {
+                    var data = "Active Application: " + info.Title + "\n" +
+                        "hWnd: " + info.HWnd + "\n" +
+                        "Filename: " + info.FileName + "\n" +
+                        "Location: " + info.Location + "\n" +
+                        "Process: " + info.ProcessId;
 
-                Console.WriteLine(data);
-                Console.WriteLine("--------");
-
-                //SetStatus(info.FileName + ":" + info.ProcessId + " (" + info.Title + ") [" + info.HWnd + "]" + (string.IsNullOrEmpty(info.Location) ? string.Empty : "\r\n" + info.Location));
+                    var currentData = new EventData(DateTime.UtcNow, TimeSpan.Zero, data, this.GetType());
+                    var actions = new List<EventAction>() {
+                        new UpdateEventAction(Guid.NewGuid(), currentData),
+                    };
+                    e(this, new ActionsEventArgs(actions));
+                }
             }
         }
 

@@ -7,6 +7,8 @@ using EventsLibrary;
 using System.Collections.Generic;
 using System.Data.Objects;
 using System.Threading;
+using System.Reflection;
+using System.IO;
 
 namespace Productivity
 {
@@ -20,6 +22,9 @@ namespace Productivity
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public CollectionForm()
         {
+            var dir = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins");
+            var plugins = PluginLoader.LoadAllPlugins(dir);
+
             this.processor = new QueueProcessor(this.actionQueue, this.db);
 
             InitializeComponent();
@@ -27,13 +32,23 @@ namespace Productivity
             var ping = new PingEventSource("1");
             ping.EventRaised += this.Source_EventRaised;
             this.sources.Add(ping);
+
+            foreach (var plugin in from p in plugins
+                                    let evt = p as IEventSourceFactory
+                                    where evt != null
+                                    select evt)
+            {
+                var p = plugin.CreateInstance(string.Empty);
+                p.EventRaised += this.Source_EventRaised;
+                this.sources.Add(p);
+            }
         }
 
         private void Source_EventRaised(object sender, ActionsEventArgs e)
         {
             lock (this.actionQueue)
             {
-                this.actionQueue.Enqueue(e.Actions.ToList().AsReadOnly());
+                this.actionQueue.Enqueue(e.Actions.ToArray());
                 Monitor.PulseAll(this.actionQueue);
             }
         }

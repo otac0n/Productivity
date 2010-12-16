@@ -15,9 +15,10 @@ namespace Productivity.ActiveApplicationAddIn
             { "IEXPLORE.EXE", "IExplore" },
             { "FIREFOX.EXE", "Firefox" },
             { "OPERA.EXE", "Opera" },
-
+#if WIN16
             { "NETSCAPE.EXE", "Netscape" },
             { "MOSAIC.EXE", "Mosaic" },
+#endif
         };
 
         private static Dictionary<string, string[][]> pathLookups = new Dictionary<string, string[][]>()
