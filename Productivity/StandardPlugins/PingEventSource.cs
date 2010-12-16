@@ -13,7 +13,7 @@
         private readonly Guid terminatedId = Guid.NewGuid();
 
         private Timer timer;
-
+        private bool startedLogged = false;
         private bool disposed = false;
 
         public event EventHandler<ActionsEventArgs> EventRaised;
@@ -49,6 +49,14 @@
             var terminatedData = new EventData(now, TimeSpan.Zero, exitMessage, this.GetType());
 
             var actions = new List<EventAction>();
+
+            if (!this.startedLogged)
+            {
+                var startedData = new EventData(this.startTime, TimeSpan.Zero, "Application Started", this.GetType());
+                actions.Add(new UpdateEventAction(Guid.NewGuid(), startedData));
+                this.startedLogged = true;
+            }
+
             actions.Add(new UpdateEventAction(this.runningId, runningData));
             actions.Add(new UpdateEventAction(this.terminatedId, terminatedData));
 
