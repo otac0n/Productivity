@@ -23,7 +23,7 @@ namespace Productivity.StandardPlugins
 
         public event EventHandler<ActionsEventArgs> EventRaised;
 
-        public SystemStatusSource()
+        public SystemStatusSource(string settings)
         {
             this.hSessionSwitch = new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
             SystemEvents.SessionSwitch += this.hSessionSwitch;

@@ -33,6 +33,10 @@ namespace Productivity
             ping.EventRaised += this.Source_EventRaised;
             this.sources.Add(ping);
 
+            var sys = new SystemStatusSource(null);
+            sys.EventRaised += this.Source_EventRaised;
+            this.sources.Add(sys);
+
             foreach (var plugin in from p in plugins
                                     let evt = p as IEventSourceFactory
                                     where evt != null
