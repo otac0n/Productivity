@@ -37,6 +37,14 @@ namespace Productivity
             sys.EventRaised += this.Source_EventRaised;
             this.sources.Add(sys);
 
+            var kbd = new KeyboardActivitySource(null);
+            kbd.EventRaised += this.Source_EventRaised;
+            this.sources.Add(kbd);
+
+            var mos = new MouseActivitySource(null);
+            mos.EventRaised += this.Source_EventRaised;
+            this.sources.Add(mos);
+
             foreach (var plugin in from p in plugins
                                     let evt = p as IEventSourceFactory
                                     where evt != null
