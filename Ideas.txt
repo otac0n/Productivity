@@ -1,0 +1,10 @@
+Example Plugin Sources:
+	Outlook
+	Call Manager
+	SVN
+
+Example Rule Set:
+	If the most recent entry in 'SystemStatusSource' is 'Session Locked', 'Remote Terminal Disconnected', or 'Remote Console Disconnected' -> "AFK"
+	If the active application is 'devenv.exe' -> "Working on " + Regex(Title, "(?<project>.*?)(:? \(Running\))? - Microsoft Visual Studio")["project"]
+	If the active url matches "http://stackoverflow.com%', "http://programmers.stackexchange.com%', ... -> "Researching"
+	If mouse is not active and keyboard is not active -> "Idle"
