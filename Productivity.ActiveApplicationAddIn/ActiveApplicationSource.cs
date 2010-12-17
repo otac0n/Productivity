@@ -11,6 +11,8 @@ namespace Productivity.ActiveApplicationAddIn
     public sealed class ActiveApplicationSource : IEventSource
     {
         private Timer timer;
+        private Guid lastId = Guid.Empty;
+        private EventData lastData = null;
 
         public event EventHandler<ActionsEventArgs> EventRaised;
 
@@ -21,24 +23,56 @@ namespace Productivity.ActiveApplicationAddIn
 
         private void SnapshotTimer_Tick(object state)
         {
-            var e = this.EventRaised;
-            if (e != null)
-            {
-                var info = UserContext.GetUserContextInfo();
-                if (info != null)
-                {
-                    var data = "Active Application: " + info.Title + "\n" +
-                        "hWnd: " + info.HWnd + "\n" +
-                        "Filename: " + info.FileName + "\n" +
-                        "Location: " + info.Location + "\n" +
-                        "Process: " + info.ProcessId;
+            var now = DateTimeOffset.UtcNow;
+            var actions = new List<EventAction>();
+            UpdateLastTick(now, actions);
 
-                    var currentData = new EventData(DateTime.UtcNow, TimeSpan.Zero, data, this.GetType());
-                    var actions = new List<EventAction>() {
-                        new UpdateEventAction(Guid.NewGuid(), currentData),
-                    };
-                    e(this, new ActionsEventArgs(actions));
-                }
+            var info = UserContext.GetUserContextInfo();
+            if (info != null)
+            {
+                var data = "Active Application: " + info.Title + "\n" +
+                    "hWnd: " + info.HWnd + "\n" +
+                    "Filename: " + info.FileName + "\n" +
+                    "Location: " + info.Location + "\n" +
+                    "Process: " + info.ProcessId;
+
+                UpdateCurrentTick(now, data, actions);
+            }
+            else
+            {
+                UpdateCurrentTick(now, null, actions);
+            }
+
+            if (this.EventRaised != null && actions.Count > 0)
+            {
+                this.EventRaised(this, new ActionsEventArgs(actions));
+            }
+        }
+
+        private void UpdateLastTick(DateTimeOffset now, List<EventAction> actions)
+        {
+            if (this.lastData != null)
+            {
+                actions.Add(new UpdateEventAction(
+                    this.lastId,
+                    new EventData(this.lastData.Time, now - this.lastData.Time, this.lastData.Data, this.GetType())));
+            }
+        }
+
+        private void UpdateCurrentTick(DateTimeOffset now, string data, List<EventAction> actions)
+        {
+            if (data == null)
+            {
+                this.lastData = null;
+            }
+            else if (this.lastData == null || this.lastData.Data != data)
+            {
+                this.lastId = Guid.NewGuid();
+                this.lastData = new EventData(now, TimeSpan.Zero, data, this.GetType());
+
+                actions.Add(new UpdateEventAction(
+                    this.lastId,
+                    this.lastData));
             }
         }
 
