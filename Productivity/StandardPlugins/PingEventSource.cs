@@ -45,14 +45,14 @@
         private IList<EventAction> GetActions(string exitMessage)
         {
             var now = DateTimeOffset.UtcNow;
-            var runningData = new EventData(this.startTime, now - this.startTime, "Application Running", this.GetType());
-            var terminatedData = new EventData(now, TimeSpan.Zero, exitMessage, this.GetType());
+            var runningData = new EventData(this.startTime, now - this.startTime, "{\"status\":\"Application Running\"}", this.GetType());
+            var terminatedData = new EventData(now, TimeSpan.Zero, "{\"status\":\"" + exitMessage + "\"}", this.GetType());
 
             var actions = new List<EventAction>();
 
             if (!this.startedLogged)
             {
-                var startedData = new EventData(this.startTime, TimeSpan.Zero, "Application Started", this.GetType());
+                var startedData = new EventData(this.startTime, TimeSpan.Zero, "{\"status\":\"Application Started\"}", this.GetType());
                 actions.Add(new UpdateEventAction(Guid.NewGuid(), startedData));
                 this.startedLogged = true;
             }

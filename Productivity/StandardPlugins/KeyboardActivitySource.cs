@@ -10,6 +10,8 @@ namespace Productivity.StandardPlugins
 {
     public sealed class KeyboardActivitySource : IEventSource
     {
+        private const string ActiveData = "{\"status\":\"Keyboard Active\"}";
+
         private readonly TimeSpan idleTimeSpan;
         private Guid previousId;
         private EventData previousEvent;
@@ -62,12 +64,12 @@ namespace Productivity.StandardPlugins
             if (this.previousEvent == null || this.previousEvent.Time + this.previousEvent.Duration + this.idleTimeSpan < now)
             {
                 id = Guid.NewGuid();
-                newEvent = new EventData(now, TimeSpan.Zero, "Keyboard Active", this.GetType());
+                newEvent = new EventData(now, TimeSpan.Zero, ActiveData, this.GetType());
             }
             else
             {
                 id = this.previousId;
-                newEvent = new EventData(this.previousEvent.Time, now - this.previousEvent.Time, "Keyboard Active", this.GetType());
+                newEvent = new EventData(this.previousEvent.Time, now - this.previousEvent.Time, ActiveData, this.GetType());
             }
 
             var actions = new List<EventAction>();
