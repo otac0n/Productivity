@@ -30,12 +30,7 @@ namespace Productivity.ActiveApplicationAddIn
             var info = UserContext.GetUserContextInfo();
             if (info != null)
             {
-                var data = "Active Application: " + info.Title + "\n" +
-                    "hWnd: " + info.HWnd + "\n" +
-                    "Filename: " + info.FileName + "\n" +
-                    "Location: " + info.Location + "\n" +
-                    "Process: " + info.ProcessId;
-
+                var data = DataSerializer.Serialize(info);
                 UpdateCurrentTick(now, data, actions);
             }
             else
