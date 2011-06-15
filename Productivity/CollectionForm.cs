@@ -19,6 +19,8 @@ namespace Productivity
         private Models.EventsConnection db = new Models.EventsConnection();
         private QueueProcessor processor;
 
+        private readonly ProductivityView productivityView = new ProductivityView();
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public CollectionForm()
         {
@@ -73,6 +75,14 @@ namespace Productivity
         private void ExitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void ProductivityReview_Click(object sender, EventArgs e)
+        {
+            if (!this.productivityView.Visible)
+            {
+                this.productivityView.Show(this);
+            }
         }
     }
 }

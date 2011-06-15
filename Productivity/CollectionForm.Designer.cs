@@ -55,9 +55,11 @@
             System.Windows.Forms.NotifyIcon trayIcon;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CollectionForm));
             System.Windows.Forms.ContextMenuStrip trayMenu;
+            System.Windows.Forms.ToolStripMenuItem productivityReviewToolStripMenuItem;
             System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
             trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            productivityReviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             trayMenu.SuspendLayout();
             this.SuspendLayout();
@@ -68,18 +70,28 @@
             trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
             trayIcon.Text = "Productivity";
             trayIcon.Visible = true;
+            trayIcon.DoubleClick += new System.EventHandler(this.ProductivityReview_Click);
             // 
             // trayMenu
             // 
             trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            productivityReviewToolStripMenuItem,
             exitToolStripMenuItem});
             trayMenu.Name = "trayMenu";
-            trayMenu.Size = new System.Drawing.Size(153, 48);
+            trayMenu.Size = new System.Drawing.Size(188, 70);
+            // 
+            // productivityReviewToolStripMenuItem
+            // 
+            productivityReviewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            productivityReviewToolStripMenuItem.Name = "productivityReviewToolStripMenuItem";
+            productivityReviewToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            productivityReviewToolStripMenuItem.Text = "&Productivity Review";
+            productivityReviewToolStripMenuItem.Click += new System.EventHandler(this.ProductivityReview_Click);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 

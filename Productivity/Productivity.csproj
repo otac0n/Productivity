@@ -75,6 +75,12 @@
       <DependentUpon>Events.edmx</DependentUpon>
     </Compile>
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="ProductivityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProductivityView.Designer.cs">
+      <DependentUpon>ProductivityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueProcessor.cs" />
@@ -84,6 +90,9 @@
     <Compile Include="StandardPlugins\SystemStatusSource.cs" />
     <EmbeddedResource Include="CollectionForm.resx">
       <DependentUpon>CollectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductivityView.resx">
+      <DependentUpon>ProductivityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
