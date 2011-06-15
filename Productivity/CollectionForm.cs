@@ -64,5 +64,10 @@ namespace Productivity
                 Monitor.PulseAll(this.actionQueue);
             }
         }
+
+        private void CollectionForm_Shown(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
     }
 }
