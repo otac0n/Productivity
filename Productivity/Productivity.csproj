@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\TimelineAnalyzer.cs" />
     <Compile Include="CollectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
