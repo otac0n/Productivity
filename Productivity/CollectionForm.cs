@@ -69,5 +69,10 @@ namespace Productivity
         {
             this.Hide();
         }
+
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

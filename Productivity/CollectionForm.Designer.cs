@@ -52,15 +52,36 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.NotifyIcon trayIcon;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CollectionForm));
-            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            System.Windows.Forms.ContextMenuStrip trayMenu;
+            System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+            trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            trayMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // trayIcon
             // 
-            this.trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
-            this.trayIcon.Text = "Productivity";
-            this.trayIcon.Visible = true;
+            trayIcon.ContextMenuStrip = trayMenu;
+            trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
+            trayIcon.Text = "Productivity";
+            trayIcon.Visible = true;
+            // 
+            // trayMenu
+            // 
+            trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            exitToolStripMenuItem});
+            trayMenu.Name = "trayMenu";
+            trayMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            exitToolStripMenuItem.Text = "E&xit";
+            exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
             // CollectionForm
             // 
@@ -72,13 +93,13 @@
             this.Text = "Collection";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Shown += new System.EventHandler(this.CollectionForm_Shown);
+            trayMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.NotifyIcon trayIcon;
 
     }
 }
