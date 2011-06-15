@@ -80,6 +80,22 @@ namespace Productivity.Models
             }
         }
         private ObjectSet<Event> _Events;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Rule> Rules
+        {
+            get
+            {
+                if ((_Rules == null))
+                {
+                    _Rules = base.CreateObjectSet<Rule>("Rules");
+                }
+                return _Rules;
+            }
+        }
+        private ObjectSet<Rule> _Rules;
 
         #endregion
         #region AddTo Methods
@@ -90,6 +106,14 @@ namespace Productivity.Models
         public void AddToEvents(Event @event)
         {
             base.AddObject("Events", @event);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Rules EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToRules(Rule rule)
+        {
+            base.AddObject("Rules", rule);
         }
 
         #endregion
@@ -115,19 +139,19 @@ namespace Productivity.Models
         /// </summary>
         /// <param name="eventId">Initial value of the EventId property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
+        /// <param name="endTime">Initial value of the EndTime property.</param>
         /// <param name="duration">Initial value of the Duration property.</param>
         /// <param name="type">Initial value of the Type property.</param>
         /// <param name="data">Initial value of the Data property.</param>
-        /// <param name="endTime">Initial value of the EndTime property.</param>
-        public static Event CreateEvent(global::System.Guid eventId, global::System.DateTime startTime, global::System.String duration, global::System.String type, global::System.String data, global::System.DateTime endTime)
+        public static Event CreateEvent(global::System.Guid eventId, global::System.DateTime startTime, global::System.DateTime endTime, global::System.String duration, global::System.String type, global::System.String data)
         {
             Event @event = new Event();
             @event.EventId = eventId;
             @event.StartTime = startTime;
+            @event.EndTime = endTime;
             @event.Duration = duration;
             @event.Type = type;
             @event.Data = data;
-            @event.EndTime = endTime;
             return @event;
         }
 
@@ -184,6 +208,30 @@ namespace Productivity.Models
         private global::System.DateTime _StartTime;
         partial void OnStartTimeChanging(global::System.DateTime value);
         partial void OnStartTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime EndTime
+        {
+            get
+            {
+                return _EndTime;
+            }
+            set
+            {
+                OnEndTimeChanging(value);
+                ReportPropertyChanging("EndTime");
+                _EndTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndTime");
+                OnEndTimeChanged();
+            }
+        }
+        private global::System.DateTime _EndTime;
+        partial void OnEndTimeChanging(global::System.DateTime value);
+        partial void OnEndTimeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -256,30 +304,139 @@ namespace Productivity.Models
         private global::System.String _Data;
         partial void OnDataChanging(global::System.String value);
         partial void OnDataChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Productivity.Models", Name="Rule")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Rule : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Rule object.
+        /// </summary>
+        /// <param name="ruleId">Initial value of the RuleId property.</param>
+        /// <param name="order">Initial value of the Order property.</param>
+        /// <param name="type">Initial value of the Type property.</param>
+        /// <param name="expression">Initial value of the Expression property.</param>
+        public static Rule CreateRule(global::System.Guid ruleId, global::System.Int32 order, global::System.String type, global::System.String expression)
+        {
+            Rule rule = new Rule();
+            rule.RuleId = ruleId;
+            rule.Order = order;
+            rule.Type = type;
+            rule.Expression = expression;
+            return rule;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid RuleId
+        {
+            get
+            {
+                return _RuleId;
+            }
+            set
+            {
+                if (_RuleId != value)
+                {
+                    OnRuleIdChanging(value);
+                    ReportPropertyChanging("RuleId");
+                    _RuleId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("RuleId");
+                    OnRuleIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _RuleId;
+        partial void OnRuleIdChanging(global::System.Guid value);
+        partial void OnRuleIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.DateTime EndTime
+        public global::System.Int32 Order
         {
             get
             {
-                return _EndTime;
+                return _Order;
             }
             set
             {
-                OnEndTimeChanging(value);
-                ReportPropertyChanging("EndTime");
-                _EndTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EndTime");
-                OnEndTimeChanged();
+                OnOrderChanging(value);
+                ReportPropertyChanging("Order");
+                _Order = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Order");
+                OnOrderChanged();
             }
         }
-        private global::System.DateTime _EndTime;
-        partial void OnEndTimeChanging(global::System.DateTime value);
-        partial void OnEndTimeChanged();
+        private global::System.Int32 _Order;
+        partial void OnOrderChanging(global::System.Int32 value);
+        partial void OnOrderChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Type
+        {
+            get
+            {
+                return _Type;
+            }
+            set
+            {
+                OnTypeChanging(value);
+                ReportPropertyChanging("Type");
+                _Type = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Type");
+                OnTypeChanged();
+            }
+        }
+        private global::System.String _Type;
+        partial void OnTypeChanging(global::System.String value);
+        partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Expression
+        {
+            get
+            {
+                return _Expression;
+            }
+            set
+            {
+                OnExpressionChanging(value);
+                ReportPropertyChanging("Expression");
+                _Expression = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Expression");
+                OnExpressionChanged();
+            }
+        }
+        private global::System.String _Expression;
+        partial void OnExpressionChanging(global::System.String value);
+        partial void OnExpressionChanged();
 
         #endregion
     
