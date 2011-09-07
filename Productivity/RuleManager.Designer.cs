@@ -34,8 +34,10 @@
             System.Windows.Forms.Label descriptionLabel;
             System.Windows.Forms.Label productivityLabel;
             System.Windows.Forms.Label criteriaCodeLabel;
+            System.Windows.Forms.ColumnHeader descriptionColumnHeader;
+            System.Windows.Forms.ColumnHeader productivityColumnHeader;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleManager));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitter = new System.Windows.Forms.SplitContainer();
             this.rulesList = new System.Windows.Forms.ListView();
             this.description = new System.Windows.Forms.TextBox();
             this.productivity = new System.Windows.Forms.NumericUpDown();
@@ -46,10 +48,12 @@
             descriptionLabel = new System.Windows.Forms.Label();
             productivityLabel = new System.Windows.Forms.Label();
             criteriaCodeLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            descriptionColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            productivityColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
+            this.splitter.Panel1.SuspendLayout();
+            this.splitter.Panel2.SuspendLayout();
+            this.splitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.productivity)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,45 +66,7 @@
             newButton.TabIndex = 1;
             newButton.Text = "&New";
             newButton.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(newButton);
-            this.splitContainer1.Panel1.Controls.Add(this.rulesList);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(saveButton);
-            this.splitContainer1.Panel2.Controls.Add(cancelButton);
-            this.splitContainer1.Panel2.Controls.Add(this.description);
-            this.splitContainer1.Panel2.Controls.Add(descriptionLabel);
-            this.splitContainer1.Panel2.Controls.Add(this.productivity);
-            this.splitContainer1.Panel2.Controls.Add(productivityLabel);
-            this.splitContainer1.Panel2.Controls.Add(criteriaCodeLabel);
-            this.splitContainer1.Panel2.Controls.Add(this.codeEditor);
-            this.splitContainer1.Panel2.Enabled = false;
-            this.splitContainer1.Size = new System.Drawing.Size(609, 394);
-            this.splitContainer1.SplitterDistance = 156;
-            this.splitContainer1.TabIndex = 0;
-            // 
-            // rulesList
-            // 
-            this.rulesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rulesList.Location = new System.Drawing.Point(6, 6);
-            this.rulesList.Name = "rulesList";
-            this.rulesList.Size = new System.Drawing.Size(526, 147);
-            this.rulesList.TabIndex = 0;
-            this.rulesList.UseCompatibleStateImageBehavior = false;
-            this.rulesList.View = System.Windows.Forms.View.Details;
+            newButton.Click += new System.EventHandler(this.newButton_Click);
             // 
             // saveButton
             // 
@@ -111,6 +77,7 @@
             saveButton.TabIndex = 7;
             saveButton.Text = "&Save";
             saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // cancelButton
             // 
@@ -121,15 +88,7 @@
             cancelButton.TabIndex = 6;
             cancelButton.Text = "&Cancel";
             cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // description
-            // 
-            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.description.Location = new System.Drawing.Point(299, 201);
-            this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(139, 20);
-            this.description.TabIndex = 5;
+            cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // descriptionLabel
             // 
@@ -140,20 +99,6 @@
             descriptionLabel.Size = new System.Drawing.Size(100, 13);
             descriptionLabel.TabIndex = 4;
             descriptionLabel.Text = "Default &Description:";
-            // 
-            // productivity
-            // 
-            this.productivity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.productivity.Location = new System.Drawing.Point(114, 201);
-            this.productivity.Name = "productivity";
-            this.productivity.Size = new System.Drawing.Size(48, 20);
-            this.productivity.TabIndex = 3;
-            this.productivity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.productivity.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
             // 
             // productivityLabel
             // 
@@ -174,6 +119,71 @@
             criteriaCodeLabel.TabIndex = 1;
             criteriaCodeLabel.Text = "Criteria C&ode:";
             // 
+            // splitter
+            // 
+            this.splitter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitter.Location = new System.Drawing.Point(0, 0);
+            this.splitter.Name = "splitter";
+            this.splitter.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitter.Panel1
+            // 
+            this.splitter.Panel1.Controls.Add(newButton);
+            this.splitter.Panel1.Controls.Add(this.rulesList);
+            // 
+            // splitter.Panel2
+            // 
+            this.splitter.Panel2.Controls.Add(saveButton);
+            this.splitter.Panel2.Controls.Add(cancelButton);
+            this.splitter.Panel2.Controls.Add(this.description);
+            this.splitter.Panel2.Controls.Add(descriptionLabel);
+            this.splitter.Panel2.Controls.Add(this.productivity);
+            this.splitter.Panel2.Controls.Add(productivityLabel);
+            this.splitter.Panel2.Controls.Add(criteriaCodeLabel);
+            this.splitter.Panel2.Controls.Add(this.codeEditor);
+            this.splitter.Panel2.Enabled = false;
+            this.splitter.Size = new System.Drawing.Size(609, 394);
+            this.splitter.SplitterDistance = 156;
+            this.splitter.TabIndex = 0;
+            // 
+            // rulesList
+            // 
+            this.rulesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rulesList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            descriptionColumnHeader,
+            productivityColumnHeader});
+            this.rulesList.Location = new System.Drawing.Point(6, 6);
+            this.rulesList.Name = "rulesList";
+            this.rulesList.Size = new System.Drawing.Size(526, 147);
+            this.rulesList.TabIndex = 0;
+            this.rulesList.UseCompatibleStateImageBehavior = false;
+            this.rulesList.View = System.Windows.Forms.View.Details;
+            // 
+            // description
+            // 
+            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.description.Location = new System.Drawing.Point(299, 201);
+            this.description.Name = "description";
+            this.description.Size = new System.Drawing.Size(139, 20);
+            this.description.TabIndex = 5;
+            // 
+            // productivity
+            // 
+            this.productivity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.productivity.Location = new System.Drawing.Point(114, 201);
+            this.productivity.Name = "productivity";
+            this.productivity.Size = new System.Drawing.Size(48, 20);
+            this.productivity.TabIndex = 3;
+            this.productivity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.productivity.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
             // codeEditor
             // 
             this.codeEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -185,20 +195,30 @@
             this.codeEditor.Size = new System.Drawing.Size(600, 174);
             this.codeEditor.TabIndex = 0;
             // 
+            // descriptionColumnHeader
+            // 
+            descriptionColumnHeader.Text = "Description";
+            descriptionColumnHeader.Width = 250;
+            // 
+            // productivityColumnHeader
+            // 
+            productivityColumnHeader.Text = "Productivity";
+            productivityColumnHeader.Width = 100;
+            // 
             // RuleManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(609, 394);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitter);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RuleManager";
             this.Text = "RuleManager";
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitter.Panel1.ResumeLayout(false);
+            this.splitter.Panel2.ResumeLayout(false);
+            this.splitter.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();
+            this.splitter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.productivity)).EndInit();
             this.ResumeLayout(false);
 
@@ -206,7 +226,7 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitter;
         private System.Windows.Forms.ListView rulesList;
         private System.Windows.Forms.TextBox codeEditor;
         private System.Windows.Forms.NumericUpDown productivity;
