@@ -1,11 +1,10 @@
 ﻿using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.CodeDom;
 
 namespace Productivity.Analysis
 {
@@ -31,16 +30,17 @@ namespace Productivity.Analysis
         private static CodeCompileUnit FormatSource(string source, IList<Tuple<Type, string>> parameters, Type returnType)
         {
             var compileUnit = new CodeCompileUnit();
-            var surrogateNamespace = new CodeNamespace("SurrogateNamespace");
+            var surrogateNamespace = new CodeNamespace("code");
             compileUnit.Namespaces.Add(surrogateNamespace);
             surrogateNamespace.Imports.Add(new CodeNamespaceImport("System"));
             surrogateNamespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
             surrogateNamespace.Imports.Add(new CodeNamespaceImport("System.Linq"));
             surrogateNamespace.Imports.Add(new CodeNamespaceImport("System.Text"));
-            var surrogateType = new CodeTypeDeclaration("SurrogateType");
+            surrogateNamespace.Imports.Add(new CodeNamespaceImport("System.Text.RegularExpressions"));
+            var surrogateType = new CodeTypeDeclaration("script");
             surrogateType.Attributes = MemberAttributes.Public | MemberAttributes.Static | MemberAttributes.Final;
             surrogateNamespace.Types.Add(surrogateType);
-            var targetMethod = new CodeMemberMethod { Name = "ScriptMethod" };
+            var targetMethod = new CodeMemberMethod { Name = "main" };
             surrogateType.Members.Add(targetMethod);
 
             targetMethod.ReturnType = new CodeTypeReference(returnType);
@@ -49,7 +49,8 @@ namespace Productivity.Analysis
             {
                 targetMethod.Parameters.Add(new CodeParameterDeclarationExpression(new CodeTypeReference(param.Item1), param.Item2));
             }
-            targetMethod.Statements.Add(new CodeSnippetStatement(source));
+            var statements = new CodeSnippetStatement(source) { LinePragma = new CodeLinePragma("script", 1) };
+            targetMethod.Statements.Add(statements);
 
             return compileUnit;
         }
@@ -65,8 +66,8 @@ namespace Productivity.Analysis
             }
 
             var assembly = results.CompiledAssembly;
-            var type = assembly.GetType("SurrogateNamespace.SurrogateType");
-            var method = type.GetMethod("ScriptMethod");
+            var type = assembly.GetType("code.script");
+            var method = type.GetMethod("main");
 
             return method;
         }
