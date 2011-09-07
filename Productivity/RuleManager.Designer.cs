@@ -36,6 +36,8 @@
             System.Windows.Forms.Label criteriaCodeLabel;
             System.Windows.Forms.ColumnHeader descriptionColumnHeader;
             System.Windows.Forms.ColumnHeader productivityColumnHeader;
+            System.Windows.Forms.Button editButton;
+            System.Windows.Forms.Button deleteButton;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleManager));
             this.splitter = new System.Windows.Forms.SplitContainer();
             this.rulesList = new System.Windows.Forms.ListView();
@@ -50,6 +52,8 @@
             criteriaCodeLabel = new System.Windows.Forms.Label();
             descriptionColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             productivityColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            editButton = new System.Windows.Forms.Button();
+            deleteButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
             this.splitter.Panel1.SuspendLayout();
             this.splitter.Panel2.SuspendLayout();
@@ -74,7 +78,7 @@
             saveButton.Location = new System.Drawing.Point(473, 199);
             saveButton.Name = "saveButton";
             saveButton.Size = new System.Drawing.Size(59, 23);
-            saveButton.TabIndex = 7;
+            saveButton.TabIndex = 6;
             saveButton.Text = "&Save";
             saveButton.UseVisualStyleBackColor = true;
             saveButton.Click += new System.EventHandler(this.saveButton_Click);
@@ -85,7 +89,7 @@
             cancelButton.Location = new System.Drawing.Point(538, 199);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(59, 23);
-            cancelButton.TabIndex = 6;
+            cancelButton.TabIndex = 7;
             cancelButton.Text = "&Cancel";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -116,7 +120,7 @@
             criteriaCodeLabel.Location = new System.Drawing.Point(6, 3);
             criteriaCodeLabel.Name = "criteriaCodeLabel";
             criteriaCodeLabel.Size = new System.Drawing.Size(70, 13);
-            criteriaCodeLabel.TabIndex = 1;
+            criteriaCodeLabel.TabIndex = 0;
             criteriaCodeLabel.Text = "Criteria C&ode:";
             // 
             // splitter
@@ -128,6 +132,8 @@
             // 
             // splitter.Panel1
             // 
+            this.splitter.Panel1.Controls.Add(deleteButton);
+            this.splitter.Panel1.Controls.Add(editButton);
             this.splitter.Panel1.Controls.Add(newButton);
             this.splitter.Panel1.Controls.Add(this.rulesList);
             // 
@@ -154,6 +160,8 @@
             this.rulesList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             descriptionColumnHeader,
             productivityColumnHeader});
+            this.rulesList.FullRowSelect = true;
+            this.rulesList.HideSelection = false;
             this.rulesList.Location = new System.Drawing.Point(6, 6);
             this.rulesList.Name = "rulesList";
             this.rulesList.Size = new System.Drawing.Size(526, 147);
@@ -193,7 +201,7 @@
             this.codeEditor.Multiline = true;
             this.codeEditor.Name = "codeEditor";
             this.codeEditor.Size = new System.Drawing.Size(600, 174);
-            this.codeEditor.TabIndex = 0;
+            this.codeEditor.TabIndex = 1;
             // 
             // descriptionColumnHeader
             // 
@@ -204,6 +212,25 @@
             // 
             productivityColumnHeader.Text = "Productivity";
             productivityColumnHeader.Width = 100;
+            // 
+            // editButton
+            // 
+            editButton.Location = new System.Drawing.Point(539, 42);
+            editButton.Name = "editButton";
+            editButton.Size = new System.Drawing.Size(58, 23);
+            editButton.TabIndex = 2;
+            editButton.Text = "&Edit";
+            editButton.UseVisualStyleBackColor = true;
+            editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
+            // deleteButton
+            // 
+            deleteButton.Location = new System.Drawing.Point(539, 72);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new System.Drawing.Size(58, 23);
+            deleteButton.TabIndex = 3;
+            deleteButton.Text = "&Delete";
+            deleteButton.UseVisualStyleBackColor = true;
             // 
             // RuleManager
             // 

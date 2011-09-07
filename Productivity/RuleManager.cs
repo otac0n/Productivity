@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,11 +17,18 @@ namespace Productivity
             InitializeComponent();
 
             this.db = db;
+            ReloadRulesList();
         }
 
-        private void newButton_Click(object sender, EventArgs e)
+        private void ReloadRulesList()
         {
-            OpenEditor();
+            this.rulesList.Items.Clear();
+            foreach (var rule in this.db.Rules)
+            {
+                var item = new ListViewItem(new[] { rule.Description, rule.Productivity.ToString() });
+                item.Tag = rule;
+                this.rulesList.Items.Add(item);
+            }
         }
 
         private void OpenEditor(Rule rule = null)
@@ -30,6 +38,7 @@ namespace Productivity
                 this.codeEditor.Text = rule.Expression;
                 this.productivity.Value = rule.Productivity;
                 this.description.Text = rule.Description;
+                this.splitter.Panel2.Tag = rule;
             }
 
             this.splitter.Panel1.Enabled = false;
@@ -41,18 +50,48 @@ namespace Productivity
             this.codeEditor.Text = "";
             this.productivity.Value = 50;
             this.description.Text = "";
+            this.splitter.Panel2.Tag = null;
             this.splitter.Panel2.Enabled = false;
             this.splitter.Panel1.Enabled = true;
         }
 
+        private void UpdateRule(Rule rule)
+        {
+            rule.Expression = this.codeEditor.Text;
+            rule.Productivity = (int)this.productivity.Value;
+            rule.Description = this.description.Text;
+        }
+
+        private Rule GetSelectedRule()
+        {
+            if (this.rulesList.SelectedItems.Count != 1)
+            {
+                return null;
+            }
+
+            return this.rulesList.SelectedItems[0].Tag as Rule;
+        }
+
+        private void newButton_Click(object sender, EventArgs e)
+        {
+            OpenEditor();
+        }
+
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            var rule = GetSelectedRule();
+            if (rule != null)
+            {
+                OpenEditor(rule);
+            }
+        }
+
         private void saveButton_Click(object sender, EventArgs e)
         {
-            var code = this.codeEditor.Text;
-
-            var compiler = new ScriptCompiler();
             try
             {
-                var func = ScriptManager.GetScriptFunc(code);
+                var compiler = new ScriptCompiler();
+                var func = ScriptManager.GetScriptFunc(this.codeEditor.Text);
             }
             catch (ScriptCompileFailedException ex)
             {
@@ -67,9 +106,30 @@ namespace Productivity
                 }
 
                 MessageBox.Show(string.Join(Environment.NewLine, errors));
+                return;
             }
 
-            // TODO: Save the rule.
+            var rule = (Rule)this.splitter.Panel2.Tag;
+            if (rule == null)
+            {
+                rule = new Rule();
+                this.db.Rules.AddObject(rule);
+            }
+
+            UpdateRule(rule);
+
+            try
+            {
+                this.db.SaveChanges();
+            }
+            catch (DbException ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return;
+            }
+
+            CloseEditor();
+            ReloadRulesList();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
