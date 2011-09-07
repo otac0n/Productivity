@@ -25,6 +25,7 @@ namespace Productivity.Analysis
             options.ReferencedAssemblies.Add("System.dll");
             options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add("EventsLibrary.dll");
+            options.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
         }
 
         private static CodeCompileUnit FormatSource(string source, IList<Tuple<Type, string>> parameters, Type returnType)
