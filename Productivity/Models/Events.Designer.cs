@@ -324,15 +324,17 @@ namespace Productivity.Models
         /// </summary>
         /// <param name="ruleId">Initial value of the RuleId property.</param>
         /// <param name="order">Initial value of the Order property.</param>
-        /// <param name="type">Initial value of the Type property.</param>
         /// <param name="expression">Initial value of the Expression property.</param>
-        public static Rule CreateRule(global::System.Guid ruleId, global::System.Int32 order, global::System.String type, global::System.String expression)
+        /// <param name="productivity">Initial value of the Productivity property.</param>
+        /// <param name="description">Initial value of the Description property.</param>
+        public static Rule CreateRule(global::System.Guid ruleId, global::System.Int32 order, global::System.String expression, global::System.Int32 productivity, global::System.String description)
         {
             Rule rule = new Rule();
             rule.RuleId = ruleId;
             rule.Order = order;
-            rule.Type = type;
             rule.Expression = expression;
+            rule.Productivity = productivity;
+            rule.Description = description;
             return rule;
         }
 
@@ -395,30 +397,6 @@ namespace Productivity.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Type
-        {
-            get
-            {
-                return _Type;
-            }
-            set
-            {
-                OnTypeChanging(value);
-                ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Type");
-                OnTypeChanged();
-            }
-        }
-        private global::System.String _Type;
-        partial void OnTypeChanging(global::System.String value);
-        partial void OnTypeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String Expression
         {
             get
@@ -437,6 +415,54 @@ namespace Productivity.Models
         private global::System.String _Expression;
         partial void OnExpressionChanging(global::System.String value);
         partial void OnExpressionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Productivity
+        {
+            get
+            {
+                return _Productivity;
+            }
+            set
+            {
+                OnProductivityChanging(value);
+                ReportPropertyChanging("Productivity");
+                _Productivity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Productivity");
+                OnProductivityChanged();
+            }
+        }
+        private global::System.Int32 _Productivity;
+        partial void OnProductivityChanging(global::System.Int32 value);
+        partial void OnProductivityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
 
         #endregion
     
