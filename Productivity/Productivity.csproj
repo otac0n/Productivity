@@ -68,6 +68,7 @@
     <Compile Include="Analysis\ScriptCompiler.cs" />
     <Compile Include="Analysis\ScriptManager.cs" />
     <Compile Include="Analysis\TimelineAnalyzer.cs" />
+    <Compile Include="Analysis\TimelineSegment.cs" />
     <Compile Include="CollectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
