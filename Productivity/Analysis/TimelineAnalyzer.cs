@@ -22,12 +22,10 @@
                           where e.StartTime <= endTime
                           select e).ToList();
 
-            var times = new HashSet<DateTime>();
-            foreach (var e in events)
-            {
-                times.Add(e.StartTime);
-                times.Add(e.EndTime);
-            }
+            var times = (from e in events
+                         select e.StartTime).Union
+                        (from e in events
+                         select e.EndTime).OrderBy(t => t).ToList();
         }
     }
 }
