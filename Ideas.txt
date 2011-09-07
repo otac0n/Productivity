@@ -8,3 +8,12 @@ Example Rule Set:
 	If the active application is 'devenv.exe' -> "Working on " + Regex(Title, "(?<project>.*?)(:? \(Running\))? - Microsoft Visual Studio")["project"]
 	If the active url matches "http://stackoverflow.com%', "http://programmers.stackexchange.com%', ... -> "Researching"
 	If mouse is not active and keyboard is not active -> "Idle"
+
+// --- (50%) -------------------------------------------------------------------
+// Application not running.
+// -----------------------------------------------------------------------------
+var lastPing = mostRecent(e => e.Type == "PingEventSource");
+
+return lastPing == null ||
+       lastPing.Data.status != "Application Started";
+// -----------------------------------------------------------------------------
