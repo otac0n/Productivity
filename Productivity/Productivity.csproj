@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Analysis\ScriptCompileFailedException.cs" />
     <Compile Include="Analysis\ScriptCompiler.cs" />
+    <Compile Include="Analysis\ScriptManager.cs" />
     <Compile Include="Analysis\TimelineAnalyzer.cs" />
     <Compile Include="CollectionForm.cs">
       <SubType>Form</SubType>
