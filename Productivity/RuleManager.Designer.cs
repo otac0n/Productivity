@@ -123,6 +123,35 @@
             criteriaCodeLabel.TabIndex = 0;
             criteriaCodeLabel.Text = "Criteria C&ode:";
             // 
+            // descriptionColumnHeader
+            // 
+            descriptionColumnHeader.Text = "Description";
+            descriptionColumnHeader.Width = 250;
+            // 
+            // productivityColumnHeader
+            // 
+            productivityColumnHeader.Text = "Productivity";
+            productivityColumnHeader.Width = 100;
+            // 
+            // editButton
+            // 
+            editButton.Location = new System.Drawing.Point(539, 42);
+            editButton.Name = "editButton";
+            editButton.Size = new System.Drawing.Size(58, 23);
+            editButton.TabIndex = 2;
+            editButton.Text = "&Edit";
+            editButton.UseVisualStyleBackColor = true;
+            editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
+            // deleteButton
+            // 
+            deleteButton.Location = new System.Drawing.Point(539, 72);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new System.Drawing.Size(58, 23);
+            deleteButton.TabIndex = 3;
+            deleteButton.Text = "&Delete";
+            deleteButton.UseVisualStyleBackColor = true;
+            // 
             // splitter
             // 
             this.splitter.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -197,40 +226,12 @@
             this.codeEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.codeEditor.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeEditor.Location = new System.Drawing.Point(6, 19);
             this.codeEditor.Multiline = true;
             this.codeEditor.Name = "codeEditor";
             this.codeEditor.Size = new System.Drawing.Size(600, 174);
             this.codeEditor.TabIndex = 1;
-            // 
-            // descriptionColumnHeader
-            // 
-            descriptionColumnHeader.Text = "Description";
-            descriptionColumnHeader.Width = 250;
-            // 
-            // productivityColumnHeader
-            // 
-            productivityColumnHeader.Text = "Productivity";
-            productivityColumnHeader.Width = 100;
-            // 
-            // editButton
-            // 
-            editButton.Location = new System.Drawing.Point(539, 42);
-            editButton.Name = "editButton";
-            editButton.Size = new System.Drawing.Size(58, 23);
-            editButton.TabIndex = 2;
-            editButton.Text = "&Edit";
-            editButton.UseVisualStyleBackColor = true;
-            editButton.Click += new System.EventHandler(this.editButton_Click);
-            // 
-            // deleteButton
-            // 
-            deleteButton.Location = new System.Drawing.Point(539, 72);
-            deleteButton.Name = "deleteButton";
-            deleteButton.Size = new System.Drawing.Size(58, 23);
-            deleteButton.TabIndex = 3;
-            deleteButton.Text = "&Delete";
-            deleteButton.UseVisualStyleBackColor = true;
             // 
             // RuleManager
             // 
