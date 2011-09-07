@@ -51,7 +51,7 @@
     <Compile Include="EventAction.cs" />
     <Compile Include="ActionsEventArgs.cs" />
     <Compile Include="UpdateEventAction.cs" />
-    <Compile Include="Event.cs" />
+    <Compile Include="EventData.cs" />
     <Compile Include="IEventSource.cs" />
     <Compile Include="IEventSourceFactory.cs" />
     <Compile Include="IPluginEnumerator.cs" />
