@@ -33,5 +33,11 @@
                 this.Hide();
             }
         }
+
+        private void manageRulesButton_Click(object sender, EventArgs e)
+        {
+            var ruleManager = new RuleManager(this.db);
+            ruleManager.ShowDialog(this);
+        }
     }
 }

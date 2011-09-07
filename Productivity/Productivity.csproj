@@ -89,6 +89,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueProcessor.cs" />
+    <Compile Include="RuleManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RuleManager.Designer.cs">
+      <DependentUpon>RuleManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="StandardPlugins\MouseActivitySource.cs" />
     <Compile Include="StandardPlugins\KeyboardActivitySource.cs" />
     <Compile Include="StandardPlugins\PingEventSource.cs" />
@@ -109,6 +115,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RuleManager.resx">
+      <DependentUpon>RuleManager.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.Config" />
     <EntityDeploy Include="Models\Events.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -163,6 +172,7 @@
     <Content Include="Events.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
