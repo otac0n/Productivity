@@ -6,6 +6,7 @@
     using EventsLibrary;
     using Microsoft.CSharp.RuntimeBinder;
     using Productivity.Models;
+    using EventFilter = System.Func<System.Predicate<EventsLibrary.DynamicEvent>, EventsLibrary.DynamicEvent>;
 
     public class TimelineAnalyzer
     {
@@ -41,9 +42,19 @@
 
                 TimelineSegment segment = null;
 
+                Func<Predicate<DynamicEvent>, DynamicEvent> mostRecent = predicate =>
+                {
+                    return (from e in events
+                            where e.StartTime <= span.startTime
+                            where predicate(e)
+                            orderby e.StartTime descending
+                            select e).FirstOrDefault();
+                };
+
+
                 foreach (var rule in this.db.Rules)
                 {
-                    var result = RunRule(rule, span.startTime, span.endTime, events);
+                    var result = RunRule(rule, span.startTime, span.endTime, events, mostRecent);
 
                     if (result != null)
                     {
@@ -62,10 +73,10 @@
             return segments;
         }
 
-        private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events)
+        private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent)
         {
             var ruleFunc = ScriptManager.GetScriptFunc(rule.Expression);
-            var result = ruleFunc(startTime, endTime, events);
+            var result = ruleFunc(startTime, endTime, events, mostRecent);
 
             if (result == null || result == false)
             {

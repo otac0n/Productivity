@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using EventsLibrary;
+using EventFilter = System.Func<System.Predicate<EventsLibrary.DynamicEvent>, EventsLibrary.DynamicEvent>;
 
 namespace Productivity.Analysis
 {
-    public delegate dynamic ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events);
+    public delegate dynamic ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent);
 
     public static class ScriptManager
     {
@@ -20,6 +21,7 @@ namespace Productivity.Analysis
             Tuple.Create(typeof(DateTime), "startTime"),
             Tuple.Create(typeof(DateTime), "endTime"),
             Tuple.Create(typeof(IList<DynamicEvent>), "events"),
+            Tuple.Create(typeof(EventFilter), "mostRecent"),
         };
 
         public static ScriptFunc GetScriptFunc(string source)
@@ -64,9 +66,9 @@ namespace Productivity.Analysis
         private static ScriptFunc Compile(string source)
         {
             var methodInfo = compiler.CompileToMetod(source, scriptArguments, typeof(object));
-            return (startTime, endTime, events) =>
+            return (startTime, endTime, events, mostRecent) =>
             {
-                return methodInfo.Invoke(null, new object[] { startTime, endTime, events });
+                return methodInfo.Invoke(null, new object[] { startTime, endTime, events, mostRecent });
             };
         }
     }
