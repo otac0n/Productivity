@@ -5,7 +5,7 @@ using EventsLibrary;
 
 namespace Productivity.Analysis
 {
-    public delegate dynamic ScriptFunc(DateTime startTime, DateTime endTime, IList<EventData> events);
+    public delegate dynamic ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events);
 
     public static class ScriptManager
     {
@@ -19,7 +19,7 @@ namespace Productivity.Analysis
         {
             Tuple.Create(typeof(DateTime), "startTime"),
             Tuple.Create(typeof(DateTime), "endTime"),
-            Tuple.Create(typeof(IList<EventData>), "events"),
+            Tuple.Create(typeof(IList<DynamicEvent>), "events"),
         };
 
         public static ScriptFunc GetScriptFunc(string source)
