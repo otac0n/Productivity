@@ -107,7 +107,11 @@
                 try { ruleResult.EndTime = result.EndTime; }
                 catch (RuntimeBinderException) { ruleResult.EndTime = endTime; }
 
-                // TODO: Clamp values for start and end times, as well as clamping and coalescing for productivity and description.
+                ruleResult.StartTime = Clamp(ruleResult.StartTime, startTime, endTime);
+                ruleResult.EndTime = Clamp(ruleResult.EndTime, startTime, endTime);
+                ruleResult.Productivity = Clamp(ruleResult.Productivity, 0, 100);
+                ruleResult.Description = ruleResult.Description ?? "";
+
                 if (ruleResult.StartTime >= ruleResult.EndTime)
                 {
                     return null;
@@ -115,6 +119,21 @@
 
                 return ruleResult;
             }
+        }
+
+        private TValue Clamp<TValue>(TValue value, TValue minValue, TValue maxValue) where TValue : struct, IComparable<TValue>
+        {
+            if (value.CompareTo(minValue) <= 0)
+            {
+                return minValue;
+            }
+
+            if (value.CompareTo(maxValue) >= 0)
+            {
+                return maxValue;
+            }
+
+            return value;
         }
     }
 }
