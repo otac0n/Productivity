@@ -61,7 +61,16 @@
 
                     if (result != null)
                     {
-                        // TODO: Segment the time before and after the result and add it into the list of segments that is being processed.
+                        if (result.StartTime > span.startTime)
+                        {
+                            spans.Add(new { startTime = span.startTime, endTime = result.StartTime });
+                        }
+
+                        if (result.EndTime < span.endTime)
+                        {
+                            spans.Add(new { startTime = result.EndTime, endTime = span.endTime });
+                        }
+
                         segment = result;
                         break;
                     }
