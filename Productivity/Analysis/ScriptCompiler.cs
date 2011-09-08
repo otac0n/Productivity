@@ -51,6 +51,7 @@ namespace Productivity.Analysis
             }
             var statements = new CodeSnippetStatement(source) { LinePragma = new CodeLinePragma("script", 1) };
             targetMethod.Statements.Add(statements);
+            targetMethod.Statements.Add(new CodeMethodReturnStatement(new CodePrimitiveExpression(null)));
 
             return compileUnit;
         }
