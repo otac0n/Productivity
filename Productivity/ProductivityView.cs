@@ -20,6 +20,11 @@
             this.db = new EventsConnection();
             InitializeComponent();
 
+            RefreshAnalysis();
+        }
+
+        private void RefreshAnalysis()
+        {
             var timelineAnalyzer = new TimelineAnalyzer(this.db);
             var startTime = DateTime.Today.ToUniversalTime();
             this.productivityBar.StartTime = startTime;
@@ -39,6 +44,7 @@
         {
             var ruleManager = new RuleManager(this.db);
             ruleManager.ShowDialog(this);
+            RefreshAnalysis();
         }
     }
 }
