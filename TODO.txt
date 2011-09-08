@@ -1,4 +1,3 @@
-TODO: Add additional helper methods for scripts, e.g. `current` which will the a current event that matches a predicate.
 TODO: Add deletion support to the rule manager.
 TODO: Add re-ordering support to the rule manager.
 TODO: Use a syntax-highlighted editor.

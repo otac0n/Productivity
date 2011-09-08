@@ -4,16 +4,33 @@ Example Plugin Sources:
 	SVN
 
 Example Rule Set:
-	If the most recent entry in 'SystemStatusSource' is 'Session Locked', 'Remote Terminal Disconnected', or 'Remote Console Disconnected' -> "AFK"
 	If the active application is 'devenv.exe' -> "Working on " + Regex(Title, "(?<project>.*?)(:? \(Running\))? - Microsoft Visual Studio")["project"]
 	If the active url matches "http://stackoverflow.com%', "http://programmers.stackexchange.com%', ... -> "Researching"
 	If mouse is not active and keyboard is not active -> "Idle"
 
-// --- (50%) -------------------------------------------------------------------
-// Application not running.
+// --- (nil) -------------------------------------------------------------------
+// AFK or App not running.
 // -----------------------------------------------------------------------------
-var lastPing = mostRecent(e => e.Type == "PingEventSource");
+var currentPing = current(e => e.Type == "PingEventSource");
+if (currentPing == null || currentPing.Data.status != "Application Running") {
+    return "Application not running.";
+}
 
-return lastPing == null ||
-       lastPing.Data.status != "Application Started";
+var lastStatus = mostRecent(e => e.Type == "SystemStatusSource");
+if (lastStatus != null && lastStatus.StartTime >= currentPing.StartTime) {
+    if (lastStatus.Data.status == "Session Locked" ||
+        lastStatus.Data.status == "Remote Terminal Disconnected" ||
+        lastStatus.Data.status == "Remote Console Disconnected") {
+        return "AFK";
+    }
+}
+// -----------------------------------------------------------------------------
+
+// --- (100%) ------------------------------------------------------------------
+// Visual Studio
+// -----------------------------------------------------------------------------
+var activeApp = current(e => e.Type == "ActiveApplicationSource");
+if (activeApp != null && activeApp.Data.fileName.EndsWith("devenv.exe")) {
+    return true;
+}
 // -----------------------------------------------------------------------------
