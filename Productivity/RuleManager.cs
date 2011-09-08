@@ -126,7 +126,9 @@ namespace Productivity
             if (rule == null)
             {
                 rule = new Rule();
-                rule.Order = this.db.Rules.Max(r => r.Order) + 1;
+                rule.RuleId = Guid.NewGuid();
+                var maxOrder = this.db.Rules.Max(r => (int?)r.Order);
+                rule.Order = maxOrder.HasValue ? maxOrder.Value + 1 : 0;
                 this.db.Rules.AddObject(rule);
             }
 
