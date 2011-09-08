@@ -37,6 +37,8 @@
 
             var segments = new List<TimelineSegment>();
 
+            var rules = this.db.Rules.ToList();
+
             for (int i = 0; i < spans.Count; i++)
             {
                 var span = spans[i];
@@ -53,7 +55,7 @@
                 };
 
 
-                foreach (var rule in this.db.Rules)
+                foreach (var rule in rules)
                 {
                     var result = RunRule(rule, span.startTime, span.endTime, events, mostRecent);
 
