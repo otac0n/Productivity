@@ -82,7 +82,32 @@
                 }
             }
 
+            Simplify(segments);
             return segments;
+        }
+
+        private void Simplify(List<TimelineSegment> segments)
+        {
+            segments.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
+
+            int i = 0;
+            while (i < segments.Count - 1)
+            {
+                var a = segments[i];
+                var b = segments[i + 1];
+
+                if (a.EndTime == b.StartTime &&
+                    a.Description == b.Description &&
+                    a.Productivity == b.Productivity)
+                {
+                    a.EndTime = b.EndTime;
+                    segments.RemoveAt(i + 1);
+                }
+                else
+                {
+                    i++;
+                }
+            }
         }
 
         private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent)
