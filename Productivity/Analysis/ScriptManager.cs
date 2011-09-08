@@ -6,7 +6,7 @@ using EventFilter = System.Func<System.Predicate<EventsLibrary.DynamicEvent>, Ev
 
 namespace Productivity.Analysis
 {
-    public delegate object ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent);
+    public delegate object ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent, EventFilter current);
 
     public static class ScriptManager
     {
@@ -22,6 +22,7 @@ namespace Productivity.Analysis
             Tuple.Create(typeof(DateTime), "endTime"),
             Tuple.Create(typeof(IList<DynamicEvent>), "events"),
             Tuple.Create(typeof(EventFilter), "mostRecent"),
+            Tuple.Create(typeof(EventFilter), "current"),
         };
 
         public static ScriptFunc GetScriptFunc(string source)
@@ -66,9 +67,9 @@ namespace Productivity.Analysis
         private static ScriptFunc Compile(string source)
         {
             var methodInfo = compiler.CompileToMetod(source, scriptArguments, typeof(object));
-            return (startTime, endTime, events, mostRecent) =>
+            return (startTime, endTime, events, mostRecent, current) =>
             {
-                return methodInfo.Invoke(null, new object[] { startTime, endTime, events, mostRecent });
+                return methodInfo.Invoke(null, new object[] { startTime, endTime, events, mostRecent, current });
             };
         }
     }

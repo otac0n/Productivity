@@ -55,10 +55,20 @@
                             select e).FirstOrDefault();
                 };
 
+                Func<Predicate<DynamicEvent>, DynamicEvent> current = predicate =>
+                {
+                    return (from e in events
+                            where e.StartTime <= span.startTime
+                            where e.EndTime >= span.endTime
+                            where predicate(e)
+                            orderby e.StartTime descending
+                            orderby e.EndTime ascending
+                            select e).FirstOrDefault();
+                };
 
                 foreach (var rule in rules)
                 {
-                    var result = RunRule(rule, span.startTime, span.endTime, events, mostRecent);
+                    var result = RunRule(rule, span.startTime, span.endTime, events, mostRecent, current);
 
                     if (result != null)
                     {
@@ -111,13 +121,13 @@
             }
         }
 
-        private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent)
+        private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent, EventFilter current)
         {
             var ruleFunc = ScriptManager.GetScriptFunc(rule.Expression);
             dynamic result;
             try
             {
-                result = ruleFunc(startTime, endTime, events, mostRecent);
+                result = ruleFunc(startTime, endTime, events, mostRecent, current);
             }
             catch (TargetInvocationException)
             {
