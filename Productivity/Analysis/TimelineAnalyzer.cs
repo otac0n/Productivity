@@ -79,19 +79,21 @@
             var ruleFunc = ScriptManager.GetScriptFunc(rule.Expression);
             var result = ruleFunc(startTime, endTime, events, mostRecent);
 
-            if (result == null || result == false)
+            if (result == null)
             {
                 return null;
             }
-            else if (result == true)
+            else if (result is bool)
             {
-                return new TimelineSegment
-                {
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    Description = rule.Description,
-                    Productivity = rule.Productivity,
-                };
+                return !result
+                    ? null
+                    : new TimelineSegment
+                      {
+                          StartTime = startTime,
+                          EndTime = endTime,
+                          Description = rule.Description,
+                          Productivity = rule.Productivity,
+                      };
             }
             else if (result is string)
             {
