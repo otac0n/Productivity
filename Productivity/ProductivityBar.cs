@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using EventsLibrary;
 using Productivity.Analysis;
 
 namespace Productivity
@@ -34,7 +35,9 @@ namespace Productivity
                 }
                 else
                 {
-                    this.segments = value.ToList().AsReadOnly();
+                    var list = value.ToList();
+                    list.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
+                    this.segments = list.AsReadOnly();
                 }
 
                 this.Invalidate();
@@ -68,8 +71,6 @@ namespace Productivity
                 var top = e.ClipRectangle.Top;
                 var bottom = e.ClipRectangle.Bottom;
 
-                var pen = new Pen(Color.FromArgb(255, 255, 0, 0));
-
                 var totalMs = this.TimeSpan.TotalMilliseconds;
                 var keyTime = this.StartTime;
                 var endTime = keyTime;
@@ -78,10 +79,46 @@ namespace Productivity
                 for (int x = left; x <= right; x++)
                 {
                     startTime = endTime;
-                    endTime = keyTime.AddMilliseconds(totalMs * ((double)x / this.Width));
-                    if (this.segments.Any(s => s.StartTime <= endTime && s.EndTime >= startTime))
+                    endTime = keyTime.AddMilliseconds(totalMs * ((double)(x + 1) / this.Width));
+                    var currentSegments = this.segments.Where(s => s.StartTime <= endTime && s.EndTime >= startTime).ToList();
+                    if (currentSegments.Count > 0)
                     {
-                        g.DrawLine(pen, x, top, x, bottom);
+                        var barMs = (endTime - startTime).TotalMilliseconds;
+                        var unkonwnMs = barMs;
+                        var productiveMs = 0.0;
+                        var unproductiveMs = 0.0;
+
+                        foreach (var segment in currentSegments)
+                        {
+                            if (segment.Productivity.HasValue)
+                            {
+                                var clampedStart = segment.StartTime.Clamp(startTime, endTime);
+                                var clampedEnd = segment.EndTime.Clamp(startTime, endTime);
+
+                                var segmentMs = (clampedEnd - clampedStart).TotalMilliseconds;
+                                var productivePortion = segmentMs * (segment.Productivity.Value / 100.0);
+                                var unproductivePortion = segmentMs - productivePortion;
+
+                                productiveMs += productivePortion;
+                                unproductiveMs += unproductivePortion;
+                                unkonwnMs -= segmentMs;
+                            }
+                        }
+
+                        if (barMs != unkonwnMs)
+                        {
+                            // Re-calculate the bar's time to compensate for rounding error.
+                            barMs = unkonwnMs + productiveMs + unproductiveMs;
+                            var alpha = 1.0 - (unkonwnMs / barMs);
+
+                            // Base the colors on only the portion of time that is productive or unproductive.
+                            barMs = productiveMs + unproductiveMs;
+                            var productive = productiveMs / barMs;
+                            var unproductive = unproductiveMs / barMs;
+
+                            var pen = new Pen(Color.FromArgb((int)(255 * alpha), (int)(255 * unproductive), (int)(255 * productive), 0));
+                            g.DrawLine(pen, x, top, x, bottom);
+                        }
                     }
                 }
             }
