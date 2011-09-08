@@ -48,6 +48,12 @@ namespace Productivity
 
         public TimeSpan TimeSpan { get; set; }
 
+        protected override void OnResize(EventArgs e)
+        {
+            this.Invalidate();
+            base.OnResize(e);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
