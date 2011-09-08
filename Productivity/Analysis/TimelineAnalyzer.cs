@@ -160,12 +160,12 @@
                 ruleResult.StartTime = RetrieveField(result, "StartTime", startTime);
                 ruleResult.EndTime = RetrieveField(result, "EndTime", endTime);
 
-                ruleResult.StartTime = Clamp(ruleResult.StartTime, startTime, endTime);
-                ruleResult.EndTime = Clamp(ruleResult.EndTime, startTime, endTime);
+                ruleResult.StartTime = ruleResult.StartTime.Clamp(startTime, endTime);
+                ruleResult.EndTime = ruleResult.EndTime.Clamp(startTime, endTime);
                 ruleResult.Description = ruleResult.Description ?? "";
                 if (ruleResult.Productivity.HasValue)
                 {
-                    ruleResult.Productivity = Clamp(ruleResult.Productivity.Value, 0, 100);
+                    ruleResult.Productivity = ruleResult.Productivity.Value.Clamp(0, 100);
                 }
 
                 if (ruleResult.StartTime >= ruleResult.EndTime)
@@ -214,21 +214,6 @@
             }
 
             return def;
-        }
-
-        private TValue Clamp<TValue>(TValue value, TValue minValue, TValue maxValue) where TValue : struct, IComparable<TValue>
-        {
-            if (value.CompareTo(minValue) <= 0)
-            {
-                return minValue;
-            }
-
-            if (value.CompareTo(maxValue) >= 0)
-            {
-                return maxValue;
-            }
-
-            return value;
         }
     }
 }
