@@ -55,25 +55,31 @@ namespace Productivity
             g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             g.SmoothingMode = SmoothingMode.HighSpeed;
 
-            var left = e.ClipRectangle.Left;
-            var right = e.ClipRectangle.Right;
-            var top = e.ClipRectangle.Top;
-            var bottom = e.ClipRectangle.Bottom;
+            var background = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.White, Color.Silver);
+            g.FillRectangle(background, this.ClientRectangle);
 
-            var pen = new Pen(Color.FromArgb(255, 255, 0, 0));
-
-            var totalMs = this.TimeSpan.TotalMilliseconds;
-            var keyTime = this.StartTime.ToUniversalTime().DateTime;
-            var endTime = keyTime;
-            var startTime = endTime;
-
-            for (int x = left; x <= right; x++)
+            if (this.segments != null)
             {
-                startTime = endTime;
-                endTime = keyTime.AddMilliseconds(totalMs * ((double)x / this.Width));
-                if (this.segments.Any(s => s.StartTime <= endTime && s.EndTime >= startTime))
+                var left = e.ClipRectangle.Left;
+                var right = e.ClipRectangle.Right;
+                var top = e.ClipRectangle.Top;
+                var bottom = e.ClipRectangle.Bottom;
+
+                var pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+
+                var totalMs = this.TimeSpan.TotalMilliseconds;
+                var keyTime = this.StartTime.ToUniversalTime().DateTime;
+                var endTime = keyTime;
+                var startTime = endTime;
+
+                for (int x = left; x <= right; x++)
                 {
-                    g.DrawLine(pen, x, top, x, bottom);
+                    startTime = endTime;
+                    endTime = keyTime.AddMilliseconds(totalMs * ((double)x / this.Width));
+                    if (this.segments.Any(s => s.StartTime <= endTime && s.EndTime >= startTime))
+                    {
+                        g.DrawLine(pen, x, top, x, bottom);
+                    }
                 }
             }
 
