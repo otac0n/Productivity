@@ -6,7 +6,7 @@ using EventFilter = System.Func<System.Predicate<EventsLibrary.DynamicEvent>, Ev
 
 namespace Productivity.Analysis
 {
-    public delegate dynamic ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent);
+    public delegate object ScriptFunc(DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent);
 
     public static class ScriptManager
     {

@@ -155,17 +155,10 @@
             {
                 var ruleResult = new TimelineSegment();
 
-                try { ruleResult.Description = result.Description; }
-                catch (RuntimeBinderException) { ruleResult.Description = rule.Description; }
-
-                try { ruleResult.Productivity = result.Productivity; }
-                catch (RuntimeBinderException) { ruleResult.Productivity = rule.Productivity; }
-
-                try { ruleResult.StartTime = result.StartTime; }
-                catch (RuntimeBinderException) { ruleResult.StartTime = startTime; }
-
-                try { ruleResult.EndTime = result.EndTime; }
-                catch (RuntimeBinderException) { ruleResult.EndTime = endTime; }
+                ruleResult.Description = RetrieveField(result, "Description", rule.Description);
+                ruleResult.Productivity = RetrieveField(result, "Productivity", rule.Productivity);
+                ruleResult.StartTime = RetrieveField(result, "StartTime", startTime);
+                ruleResult.EndTime = RetrieveField(result, "EndTime", endTime);
 
                 ruleResult.StartTime = Clamp(ruleResult.StartTime, startTime, endTime);
                 ruleResult.EndTime = Clamp(ruleResult.EndTime, startTime, endTime);
@@ -182,6 +175,45 @@
 
                 return ruleResult;
             }
+        }
+
+        private TValue RetrieveField<TValue>(object result, string fieldName, TValue def)
+        {
+            var type = result.GetType();
+            var members = type.GetMember(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.GetField | BindingFlags.IgnoreCase);
+
+            if (members.Length == 1)
+            {
+                var member = members[0];
+                dynamic value;
+
+                try
+                {
+                    if (member is FieldInfo)
+                    {
+                        var field = member as FieldInfo;
+                        value = field.GetValue(result);
+                    }
+                    else
+                    {
+                        var property = (PropertyInfo)member;
+                        value = property.GetValue(result, null);
+                    }
+
+                    try
+                    {
+                        return value;
+                    }
+                    catch (RuntimeBinderException)
+                    {
+                    }
+                }
+                catch (TargetInvocationException)
+                {
+                }
+            }
+
+            return def;
         }
 
         private TValue Clamp<TValue>(TValue value, TValue minValue, TValue maxValue) where TValue : struct, IComparable<TValue>
