@@ -30,7 +30,8 @@
             var times = (from e in events
                          select e.StartTime).Union
                         (from e in events
-                         select e.EndTime).OrderBy(t => t).ToList();
+                         select e.EndTime).Union
+                        (new[] { startTime, endTime }).OrderBy(t => t).ToList();
 
             var spans = times.Zip(times.Skip(1), (start, end) => new { startTime = start, endTime = end }).ToList();
 
