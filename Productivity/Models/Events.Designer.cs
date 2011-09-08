@@ -325,15 +325,13 @@ namespace Productivity.Models
         /// <param name="ruleId">Initial value of the RuleId property.</param>
         /// <param name="order">Initial value of the Order property.</param>
         /// <param name="expression">Initial value of the Expression property.</param>
-        /// <param name="productivity">Initial value of the Productivity property.</param>
         /// <param name="description">Initial value of the Description property.</param>
-        public static Rule CreateRule(global::System.Guid ruleId, global::System.Int32 order, global::System.String expression, global::System.Int32 productivity, global::System.String description)
+        public static Rule CreateRule(global::System.Guid ruleId, global::System.Int32 order, global::System.String expression, global::System.String description)
         {
             Rule rule = new Rule();
             rule.RuleId = ruleId;
             rule.Order = order;
             rule.Expression = expression;
-            rule.Productivity = productivity;
             rule.Description = description;
             return rule;
         }
@@ -419,9 +417,9 @@ namespace Productivity.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 Productivity
+        public Nullable<global::System.Int32> Productivity
         {
             get
             {
@@ -436,8 +434,8 @@ namespace Productivity.Models
                 OnProductivityChanged();
             }
         }
-        private global::System.Int32 _Productivity;
-        partial void OnProductivityChanging(global::System.Int32 value);
+        private Nullable<global::System.Int32> _Productivity;
+        partial void OnProductivityChanging(Nullable<global::System.Int32> value);
         partial void OnProductivityChanged();
     
         /// <summary>

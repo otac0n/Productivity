@@ -169,8 +169,11 @@
 
                 ruleResult.StartTime = Clamp(ruleResult.StartTime, startTime, endTime);
                 ruleResult.EndTime = Clamp(ruleResult.EndTime, startTime, endTime);
-                ruleResult.Productivity = Clamp(ruleResult.Productivity, 0, 100);
                 ruleResult.Description = ruleResult.Description ?? "";
+                if (ruleResult.Productivity.HasValue)
+                {
+                    ruleResult.Productivity = Clamp(ruleResult.Productivity.Value, 0, 100);
+                }
 
                 if (ruleResult.StartTime >= ruleResult.EndTime)
                 {

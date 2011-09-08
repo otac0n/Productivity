@@ -44,6 +44,7 @@
             this.description = new System.Windows.Forms.TextBox();
             this.productivity = new System.Windows.Forms.NumericUpDown();
             this.codeEditor = new System.Windows.Forms.TextBox();
+            this.nullProductivity = new System.Windows.Forms.CheckBox();
             newButton = new System.Windows.Forms.Button();
             saveButton = new System.Windows.Forms.Button();
             cancelButton = new System.Windows.Forms.Button();
@@ -78,7 +79,7 @@
             saveButton.Location = new System.Drawing.Point(473, 199);
             saveButton.Name = "saveButton";
             saveButton.Size = new System.Drawing.Size(59, 23);
-            saveButton.TabIndex = 6;
+            saveButton.TabIndex = 7;
             saveButton.Text = "&Save";
             saveButton.UseVisualStyleBackColor = true;
             saveButton.Click += new System.EventHandler(this.saveButton_Click);
@@ -89,7 +90,7 @@
             cancelButton.Location = new System.Drawing.Point(538, 199);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new System.Drawing.Size(59, 23);
-            cancelButton.TabIndex = 7;
+            cancelButton.TabIndex = 8;
             cancelButton.Text = "&Cancel";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
@@ -101,7 +102,7 @@
             descriptionLabel.Location = new System.Drawing.Point(193, 204);
             descriptionLabel.Name = "descriptionLabel";
             descriptionLabel.Size = new System.Drawing.Size(100, 13);
-            descriptionLabel.TabIndex = 4;
+            descriptionLabel.TabIndex = 5;
             descriptionLabel.Text = "Default &Description:";
             // 
             // productivityLabel
@@ -168,6 +169,7 @@
             // 
             // splitter.Panel2
             // 
+            this.splitter.Panel2.Controls.Add(this.nullProductivity);
             this.splitter.Panel2.Controls.Add(saveButton);
             this.splitter.Panel2.Controls.Add(cancelButton);
             this.splitter.Panel2.Controls.Add(this.description);
@@ -205,15 +207,15 @@
             this.description.Location = new System.Drawing.Point(299, 201);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(139, 20);
-            this.description.TabIndex = 5;
+            this.description.TabIndex = 6;
             // 
             // productivity
             // 
             this.productivity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.productivity.Location = new System.Drawing.Point(114, 201);
+            this.productivity.Location = new System.Drawing.Point(135, 201);
             this.productivity.Name = "productivity";
             this.productivity.Size = new System.Drawing.Size(48, 20);
-            this.productivity.TabIndex = 3;
+            this.productivity.TabIndex = 4;
             this.productivity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.productivity.Value = new decimal(new int[] {
             50,
@@ -232,6 +234,18 @@
             this.codeEditor.Name = "codeEditor";
             this.codeEditor.Size = new System.Drawing.Size(600, 174);
             this.codeEditor.TabIndex = 1;
+            // 
+            // nullProductivity
+            // 
+            this.nullProductivity.AutoSize = true;
+            this.nullProductivity.Checked = true;
+            this.nullProductivity.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.nullProductivity.Location = new System.Drawing.Point(114, 204);
+            this.nullProductivity.Name = "nullProductivity";
+            this.nullProductivity.Size = new System.Drawing.Size(15, 14);
+            this.nullProductivity.TabIndex = 3;
+            this.nullProductivity.UseVisualStyleBackColor = true;
+            this.nullProductivity.CheckedChanged += new System.EventHandler(this.nullProductivity_CheckedChanged);
             // 
             // RuleManager
             // 
@@ -259,5 +273,6 @@
         private System.Windows.Forms.TextBox codeEditor;
         private System.Windows.Forms.NumericUpDown productivity;
         private System.Windows.Forms.TextBox description;
+        private System.Windows.Forms.CheckBox nullProductivity;
     }
 }

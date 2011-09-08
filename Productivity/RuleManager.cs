@@ -25,7 +25,7 @@ namespace Productivity
             this.rulesList.Items.Clear();
             foreach (var rule in this.db.Rules)
             {
-                var item = new ListViewItem(new[] { rule.Description, rule.Productivity.ToString() });
+                var item = new ListViewItem(new[] { rule.Description, rule.Productivity.HasValue ? rule.Productivity.ToString() : "(not tracked)" });
                 item.Tag = rule;
                 this.rulesList.Items.Add(item);
             }
@@ -36,9 +36,16 @@ namespace Productivity
             if (rule != null)
             {
                 this.codeEditor.Text = rule.Expression;
-                this.productivity.Value = rule.Productivity;
                 this.description.Text = rule.Description;
                 this.splitter.Panel2.Tag = rule;
+                if (rule.Productivity.HasValue)
+                {
+                    this.productivity.Value = rule.Productivity.Value;
+                }
+                else
+                {
+                    this.nullProductivity.Checked = false;
+                }
             }
 
             this.splitter.Panel1.Enabled = false;
@@ -48,6 +55,7 @@ namespace Productivity
         private void CloseEditor()
         {
             this.codeEditor.Text = "";
+            this.nullProductivity.Checked = true;
             this.productivity.Value = 50;
             this.description.Text = "";
             this.splitter.Panel2.Tag = null;
@@ -58,7 +66,7 @@ namespace Productivity
         private void UpdateRule(Rule rule)
         {
             rule.Expression = this.codeEditor.Text;
-            rule.Productivity = (int)this.productivity.Value;
+            rule.Productivity = this.nullProductivity.Checked ? (int?)this.productivity.Value : null;
             rule.Description = this.description.Text;
         }
 
@@ -70,6 +78,11 @@ namespace Productivity
             }
 
             return this.rulesList.SelectedItems[0].Tag as Rule;
+        }
+
+        private void nullProductivity_CheckedChanged(object sender, EventArgs e)
+        {
+            this.productivity.Enabled = this.nullProductivity.Checked;
         }
 
         private void newButton_Click(object sender, EventArgs e)

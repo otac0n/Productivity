@@ -27,7 +27,7 @@
           <Property Name="RuleId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Order" Type="int" Nullable="false" />
           <Property Name="Expression" Type="nvarchar" Nullable="false" />
-          <Property Name="Productivity" Type="int" Nullable="false" />
+          <Property Name="Productivity" Type="int" />
           <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="1000" />
         </EntityType>
       </Schema></edmx:StorageModels>
@@ -56,7 +56,7 @@
           <Property Type="Guid" Name="RuleId" Nullable="false" />
           <Property Type="Int32" Name="Order" Nullable="false" />
           <Property Type="String" Name="Expression" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="Productivity" Nullable="false" />
+          <Property Type="Int32" Name="Productivity" Nullable="true" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
