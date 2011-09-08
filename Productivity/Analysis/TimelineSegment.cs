@@ -2,7 +2,7 @@
 
 namespace Productivity.Analysis
 {
-    internal class TimelineSegment
+    public class TimelineSegment
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

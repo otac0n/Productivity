@@ -32,6 +32,7 @@
             System.Windows.Forms.ToolStripButton manageRulesButton;
             System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
+            this.productivityBar = new Productivity.ProductivityBar();
             toolStrip = new System.Windows.Forms.ToolStrip();
             manageRulesButton = new System.Windows.Forms.ToolStripButton();
             toolStripContainer = new System.Windows.Forms.ToolStripContainer();
@@ -65,11 +66,11 @@
             // 
             // toolStripContainer.ContentPanel
             // 
-            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(284, 237);
+            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 237);
             toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             toolStripContainer.Location = new System.Drawing.Point(0, 0);
             toolStripContainer.Name = "toolStripContainer";
-            toolStripContainer.Size = new System.Drawing.Size(284, 262);
+            toolStripContainer.Size = new System.Drawing.Size(572, 262);
             toolStripContainer.TabIndex = 0;
             toolStripContainer.Text = "toolStripContainer";
             // 
@@ -77,11 +78,22 @@
             // 
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
+            // productivityBar
+            // 
+            this.productivityBar.Location = new System.Drawing.Point(160, 88);
+            this.productivityBar.Name = "productivityBar";
+            this.productivityBar.Segments = null;
+            this.productivityBar.Size = new System.Drawing.Size(255, 35);
+            this.productivityBar.StartTime = new System.DateTimeOffset(2011, 9, 7, 5, 0, 0, 0, System.TimeSpan.Parse("00:00:00"));
+            this.productivityBar.TabIndex = 0;
+            this.productivityBar.TimeSpan = System.TimeSpan.Parse("1.00:00:00");
+            // 
             // ProductivityView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(572, 262);
+            this.Controls.Add(this.productivityBar);
             this.Controls.Add(toolStripContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProductivityView";
@@ -98,6 +110,8 @@
         }
 
         #endregion
+
+        private ProductivityBar productivityBar;
 
     }
 }

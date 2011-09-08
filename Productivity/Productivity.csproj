@@ -81,6 +81,12 @@
       <DependentUpon>Events.edmx</DependentUpon>
     </Compile>
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="ProductivityBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ProductivityBar.Designer.cs">
+      <DependentUpon>ProductivityBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductivityView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +108,9 @@
     <Compile Include="StandardPlugins\SystemStatusSource.cs" />
     <EmbeddedResource Include="CollectionForm.resx">
       <DependentUpon>CollectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductivityBar.resx">
+      <DependentUpon>ProductivityBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProductivityView.resx">
       <DependentUpon>ProductivityView.cs</DependentUpon>

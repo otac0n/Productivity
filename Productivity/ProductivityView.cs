@@ -21,8 +21,9 @@
             InitializeComponent();
 
             var timelineAnalyzer = new TimelineAnalyzer(this.db);
-            var startTime = DateTime.UtcNow.Date;
-            var results = timelineAnalyzer.Analyze(startTime, startTime.AddDays(1));
+            var startTime = DateTime.Today.ToUniversalTime();
+            this.productivityBar.StartTime = startTime;
+            this.productivityBar.Segments = timelineAnalyzer.Analyze(startTime, startTime.AddDays(1));
         }
 
         private void ProductivityView_FormClosing(object sender, FormClosingEventArgs e)
