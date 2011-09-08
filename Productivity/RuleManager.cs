@@ -135,9 +135,9 @@ namespace Productivity
             {
                 this.db.SaveChanges();
             }
-            catch (DbException ex)
+            catch (System.Data.DataException ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.GetBaseException().Message);
                 return;
             }
 
