@@ -41,10 +41,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleManager));
             this.splitter = new System.Windows.Forms.SplitContainer();
             this.rulesList = new System.Windows.Forms.ListView();
+            this.nullProductivity = new System.Windows.Forms.CheckBox();
             this.description = new System.Windows.Forms.TextBox();
             this.productivity = new System.Windows.Forms.NumericUpDown();
             this.codeEditor = new System.Windows.Forms.TextBox();
-            this.nullProductivity = new System.Windows.Forms.CheckBox();
             newButton = new System.Windows.Forms.Button();
             saveButton = new System.Windows.Forms.Button();
             cancelButton = new System.Windows.Forms.Button();
@@ -200,6 +200,19 @@
             this.rulesList.UseCompatibleStateImageBehavior = false;
             this.rulesList.View = System.Windows.Forms.View.Details;
             // 
+            // nullProductivity
+            // 
+            this.nullProductivity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.nullProductivity.AutoSize = true;
+            this.nullProductivity.Checked = true;
+            this.nullProductivity.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.nullProductivity.Location = new System.Drawing.Point(114, 204);
+            this.nullProductivity.Name = "nullProductivity";
+            this.nullProductivity.Size = new System.Drawing.Size(15, 14);
+            this.nullProductivity.TabIndex = 3;
+            this.nullProductivity.UseVisualStyleBackColor = true;
+            this.nullProductivity.CheckedChanged += new System.EventHandler(this.nullProductivity_CheckedChanged);
+            // 
             // description
             // 
             this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -234,18 +247,6 @@
             this.codeEditor.Name = "codeEditor";
             this.codeEditor.Size = new System.Drawing.Size(600, 174);
             this.codeEditor.TabIndex = 1;
-            // 
-            // nullProductivity
-            // 
-            this.nullProductivity.AutoSize = true;
-            this.nullProductivity.Checked = true;
-            this.nullProductivity.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.nullProductivity.Location = new System.Drawing.Point(114, 204);
-            this.nullProductivity.Name = "nullProductivity";
-            this.nullProductivity.Size = new System.Drawing.Size(15, 14);
-            this.nullProductivity.TabIndex = 3;
-            this.nullProductivity.UseVisualStyleBackColor = true;
-            this.nullProductivity.CheckedChanged += new System.EventHandler(this.nullProductivity_CheckedChanged);
             // 
             // RuleManager
             // 
