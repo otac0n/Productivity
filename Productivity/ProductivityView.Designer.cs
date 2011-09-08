@@ -82,13 +82,13 @@
             // 
             // productivityBar
             // 
-            this.productivityBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.productivityBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.productivityBar.Location = new System.Drawing.Point(12, 50);
             this.productivityBar.Name = "productivityBar";
             this.productivityBar.Segments = null;
             this.productivityBar.Size = new System.Drawing.Size(548, 35);
-            this.productivityBar.StartTime = new System.DateTimeOffset(2011, 9, 7, 5, 0, 0, 0, System.TimeSpan.Parse("00:00:00"));
+            this.productivityBar.StartTime = new System.DateTime(2011, 9, 7, 5, 0, 0, 0);
             this.productivityBar.TabIndex = 0;
             this.productivityBar.TimeSpan = System.TimeSpan.Parse("1.00:00:00");
             // 
