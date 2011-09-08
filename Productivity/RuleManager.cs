@@ -126,6 +126,7 @@ namespace Productivity
             if (rule == null)
             {
                 rule = new Rule();
+                rule.Order = this.db.Rules.Max(r => r.Order) + 1;
                 this.db.Rules.AddObject(rule);
             }
 
