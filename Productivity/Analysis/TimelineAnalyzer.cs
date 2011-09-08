@@ -87,10 +87,18 @@
                     }
                 }
 
-                if (segment != null)
+                if (segment == null)
                 {
-                    segments.Add(segment);
+                    segment = new TimelineSegment
+                    {
+                        StartTime = span.startTime,
+                        EndTime = span.endTime,
+                        Description = "Unclassified",
+                        Productivity = 0,
+                    };
                 }
+
+                segments.Add(segment);
             }
 
             Simplify(segments);
