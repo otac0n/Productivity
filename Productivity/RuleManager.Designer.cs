@@ -136,6 +136,7 @@
             // 
             // editButton
             // 
+            editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             editButton.Location = new System.Drawing.Point(539, 42);
             editButton.Name = "editButton";
             editButton.Size = new System.Drawing.Size(58, 23);
@@ -146,6 +147,7 @@
             // 
             // deleteButton
             // 
+            deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             deleteButton.Location = new System.Drawing.Point(539, 72);
             deleteButton.Name = "deleteButton";
             deleteButton.Size = new System.Drawing.Size(58, 23);
