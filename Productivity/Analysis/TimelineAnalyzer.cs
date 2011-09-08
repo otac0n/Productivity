@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using EventsLibrary;
     using Microsoft.CSharp.RuntimeBinder;
     using Productivity.Models;
@@ -113,7 +114,16 @@
         private TimelineSegment RunRule(Rule rule, DateTime startTime, DateTime endTime, IList<DynamicEvent> events, EventFilter mostRecent)
         {
             var ruleFunc = ScriptManager.GetScriptFunc(rule.Expression);
-            var result = ruleFunc(startTime, endTime, events, mostRecent);
+            dynamic result;
+            try
+            {
+                result = ruleFunc(startTime, endTime, events, mostRecent);
+            }
+            catch (TargetInvocationException)
+            {
+                // TODO: This should be bubbled up, so that the user can be notified of which rule cause the error.
+                return null;
+            }
 
             if (result == null)
             {
