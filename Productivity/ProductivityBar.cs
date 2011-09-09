@@ -12,6 +12,7 @@ namespace Productivity
     public partial class ProductivityBar : UserControl
     {
         private IList<TimelineSegment> segments;
+        private int lastToolTipPixel = -1;
 
         public ProductivityBar()
         {
@@ -40,6 +41,7 @@ namespace Productivity
                     this.segments = list.AsReadOnly();
                 }
 
+                this.lastToolTipPixel = -1;
                 this.Invalidate();
             }
         }
@@ -50,6 +52,7 @@ namespace Productivity
 
         protected override void OnResize(EventArgs e)
         {
+            this.lastToolTipPixel = -1;
             this.Invalidate();
             base.OnResize(e);
         }
@@ -79,8 +82,8 @@ namespace Productivity
                 for (int x = left; x <= right; x++)
                 {
                     startTime = endTime;
-                    endTime = keyTime.AddMilliseconds(totalMs * ((double)(x + 1) / this.Width));
-                    var currentSegments = this.segments.Where(s => s.StartTime <= endTime && s.EndTime >= startTime).ToList();
+                    endTime = GetPixelTime(x + 1);
+                    var currentSegments = FindSegments(startTime, endTime);
                     if (currentSegments.Count > 0)
                     {
                         var barMs = (endTime - startTime).TotalMilliseconds;
@@ -124,6 +127,31 @@ namespace Productivity
             }
 
             g.DrawRectangle(Pens.Black, new Rectangle(0, 0, this.Width - 1, this.Height - 1));
+        }
+
+        private List<TimelineSegment> FindSegments(DateTime startTime, DateTime endTime)
+        {
+            return this.segments.Where(s => s.StartTime <= endTime && s.EndTime >= startTime).ToList();
+        }
+
+        private DateTime GetPixelTime(int x)
+        {
+            return this.StartTime.AddMilliseconds(this.TimeSpan.TotalMilliseconds * ((double)x / this.Width));
+        }
+
+        private void ProductivityBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            var x = e.X;
+            if (this.lastToolTipPixel != x)
+            {
+                var startTime = GetPixelTime(x);
+                var endTime = GetPixelTime(x + 1);
+
+                var segments = FindSegments(startTime, endTime);
+
+                this.segmentsToolTip.SetToolTip(this, string.Join("\n", segments.Select(s => s.ToString())));
+                this.lastToolTipPixel = x;
+            }
         }
     }
 }

@@ -28,7 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.segmentsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
+            // 
+            // segmentsToolTip
+            // 
+            this.segmentsToolTip.ShowAlways = true;
+            this.segmentsToolTip.UseAnimation = false;
             // 
             // ProductivityBar
             // 
@@ -37,10 +44,13 @@
             this.DoubleBuffered = true;
             this.Name = "ProductivityBar";
             this.Size = new System.Drawing.Size(255, 35);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ProductivityBar_MouseMove);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.ToolTip segmentsToolTip;
     }
 }
