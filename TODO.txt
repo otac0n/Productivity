@@ -7,4 +7,3 @@ TODO: Provide a way to export the productivity results.
 TODO: Add a "nag" plug-in.
 TODO: Build an interface for managing both built-in and plugged-in sources.
 TODO: Add drag-to-zoom/pan and toolbar zooming to the productivity view.
-TODO: Move the analysis to a background thread.

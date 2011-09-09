@@ -29,15 +29,16 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.ToolStrip toolStrip;
-            System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.Windows.Forms.ToolStripButton refreshButton;
             System.Windows.Forms.ToolStripButton manageRulesButton;
+            System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
+            this.analysisWorker = new System.ComponentModel.BackgroundWorker();
             this.productivityBar = new Productivity.ProductivityBar();
             toolStrip = new System.Windows.Forms.ToolStrip();
-            toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             refreshButton = new System.Windows.Forms.ToolStripButton();
             manageRulesButton = new System.Windows.Forms.ToolStripButton();
+            toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             toolStrip.SuspendLayout();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -52,26 +53,8 @@
             manageRulesButton});
             toolStrip.Location = new System.Drawing.Point(3, 0);
             toolStrip.Name = "toolStrip";
-            toolStrip.Size = new System.Drawing.Size(89, 25);
+            toolStrip.Size = new System.Drawing.Size(58, 25);
             toolStrip.TabIndex = 0;
-            // 
-            // toolStripContainer
-            // 
-            // 
-            // toolStripContainer.ContentPanel
-            // 
-            toolStripContainer.ContentPanel.Controls.Add(this.productivityBar);
-            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 237);
-            toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            toolStripContainer.Location = new System.Drawing.Point(0, 0);
-            toolStripContainer.Name = "toolStripContainer";
-            toolStripContainer.Size = new System.Drawing.Size(572, 262);
-            toolStripContainer.TabIndex = 0;
-            toolStripContainer.Text = "toolStripContainer";
-            // 
-            // toolStripContainer.TopToolStripPanel
-            // 
-            toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
             // refreshButton
             // 
@@ -92,6 +75,29 @@
             manageRulesButton.Size = new System.Drawing.Size(23, 22);
             manageRulesButton.Text = "Manage Rules";
             manageRulesButton.Click += new System.EventHandler(this.manageRulesButton_Click);
+            // 
+            // toolStripContainer
+            // 
+            // 
+            // toolStripContainer.ContentPanel
+            // 
+            toolStripContainer.ContentPanel.Controls.Add(this.productivityBar);
+            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 237);
+            toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            toolStripContainer.Location = new System.Drawing.Point(0, 0);
+            toolStripContainer.Name = "toolStripContainer";
+            toolStripContainer.Size = new System.Drawing.Size(572, 262);
+            toolStripContainer.TabIndex = 0;
+            toolStripContainer.Text = "toolStripContainer";
+            // 
+            // toolStripContainer.TopToolStripPanel
+            // 
+            toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
+            // 
+            // analysisWorker
+            // 
+            this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
+            this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
             // 
             // productivityBar
             // 
@@ -115,6 +121,7 @@
             this.Name = "ProductivityView";
             this.Text = "ProductivityView";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProductivityView_FormClosing);
+            this.Shown += new System.EventHandler(this.ProductivityView_Shown);
             toolStrip.ResumeLayout(false);
             toolStrip.PerformLayout();
             toolStripContainer.ContentPanel.ResumeLayout(false);
@@ -129,6 +136,7 @@
         #endregion
 
         private ProductivityBar productivityBar;
+        private System.ComponentModel.BackgroundWorker analysisWorker;
 
     }
 }

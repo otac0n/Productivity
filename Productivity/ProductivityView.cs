@@ -20,15 +20,8 @@
             this.db = new EventsConnection();
             InitializeComponent();
 
-            RefreshAnalysis();
-        }
-
-        private void RefreshAnalysis()
-        {
-            var timelineAnalyzer = new TimelineAnalyzer(this.db);
             var startTime = DateTime.Today.ToUniversalTime();
             this.productivityBar.StartTime = startTime;
-            this.productivityBar.Segments = timelineAnalyzer.Analyze(startTime, startTime.AddDays(1));
         }
 
         private void ProductivityView_FormClosing(object sender, FormClosingEventArgs e)
@@ -48,6 +41,40 @@
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshAnalysis();
+        }
+
+        private void RefreshAnalysis()
+        {
+            if (this.Enabled)
+            {
+                this.Enabled = false;
+                this.analysisWorker.RunWorkerAsync();
+            }
+        }
+
+        private void analysisWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var startTime = this.productivityBar.StartTime;
+            var endTime = startTime + this.productivityBar.TimeSpan;
+
+            var timelineAnalyzer = new TimelineAnalyzer(this.db);
+            e.Result = timelineAnalyzer.Analyze(startTime, endTime);
+        }
+
+        private void analysisWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.Enabled = true;
+
+            if (e.Error == null)
+            {
+                var result = (List<TimelineSegment>)e.Result;
+                this.productivityBar.Segments = result;
+            }
+        }
+
+        private void ProductivityView_Shown(object sender, EventArgs e)
         {
             RefreshAnalysis();
         }
