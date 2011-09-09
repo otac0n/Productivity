@@ -3,10 +3,6 @@ Example Plugin Sources:
 	Call Manager
 	SVN
 
-Example Rule Set:
-	If the active url matches "http://stackoverflow.com%', "http://programmers.stackexchange.com%', ... -> "Researching"
-	If mouse is not active and keyboard is not active -> "Idle"
-
 // --- (nil) -------------------------------------------------------------------
 // AFK or App not running.
 // -----------------------------------------------------------------------------
@@ -64,5 +60,38 @@ if (activeApp != null && activeApp.Data.fileName.EndsWith("GitExtensions.exe")) 
     }
 
     return true;
+}
+// -----------------------------------------------------------------------------
+
+
+// --- (70%) -------------------------------------------------------------------
+// Researching
+// -----------------------------------------------------------------------------
+var titles = new [] {
+" - Google Search - ",
+};
+
+var hostnames = new [] {
+"stackoverflow.com",
+"programmers.stackexchange.com",
+"www.codeproject.com",
+"msdn.microsoft.com",
+};
+
+var activeApp = current(e => e.Type == "ActiveApplicationSource");
+if (activeApp == null || string.IsNullOrEmpty(activeApp.Data.location))
+    return false;
+
+var t = activeApp.Data.title;
+foreach (var title in titles) {
+    var match = Regex.Match(t, title);
+    if (match.Success)
+        return true;
+}
+
+var url = new Uri(activeApp.Data.location);
+foreach (var host in hostnames) {
+    if (host.Equals(url.Host, StringComparison.CurrentCultureIgnoreCase))
+        return true;
 }
 // -----------------------------------------------------------------------------
