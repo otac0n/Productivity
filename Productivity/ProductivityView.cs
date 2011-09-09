@@ -24,6 +24,11 @@
             this.productivityBar.StartTime = startTime;
         }
 
+        private void ProductivityView_Shown(object sender, EventArgs e)
+        {
+            RefreshAnalysis();
+        }
+
         private void ProductivityView_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -65,18 +70,65 @@
 
         private void analysisWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.Enabled = true;
-
             if (e.Error == null)
             {
                 var result = (List<TimelineSegment>)e.Result;
                 this.productivityBar.Segments = result;
+
+                var score = CalculateOverall(result);
+                this.scoreLabel.Text = score.Item1.ToString("P");
+                this.timeScoredLabel.Text = FormatTime(score.Item2);
             }
+
+            this.Enabled = true;
         }
 
-        private void ProductivityView_Shown(object sender, EventArgs e)
+        private string FormatTime(TimeSpan timeSpan)
         {
-            RefreshAnalysis();
+            var sb = new StringBuilder();
+            bool shown = false;
+
+            if (timeSpan.Days > 0)
+            {
+                sb.Append(timeSpan.Days + " days");
+                shown = true;
+            }
+
+            if (shown || timeSpan.Hours > 0)
+            {
+                sb.Append((shown ? ", " : "") + timeSpan.Hours + " hrs");
+                shown = true;
+            }
+
+            sb.Append((shown ? ", " : "") + timeSpan.Minutes + " min");
+
+            return sb.ToString();
+        }
+
+        private Tuple<double, TimeSpan> CalculateOverall(List<TimelineSegment> segments)
+        {
+            var productiveMs = 0.0;
+            var unproductiveMs = 0.0;
+
+            foreach (var segment in segments)
+            {
+                if (segment.Productivity.HasValue)
+                {
+                    var segmentMs = (segment.EndTime - segment.StartTime).TotalMilliseconds;
+                    var productivePortion = segmentMs * (segment.Productivity.Value / 100.0);
+                    var unproductivePortion = segmentMs - productivePortion;
+
+                    productiveMs += productivePortion;
+                    unproductiveMs += unproductivePortion;
+                }
+            }
+
+            var totalMs = productiveMs + unproductiveMs;
+
+            var productivityScore = totalMs == 0.0 ? 0.0 : productiveMs / totalMs;
+            var timeScored = TimeSpan.FromMilliseconds(totalMs);
+
+            return Tuple.Create(productivityScore, timeScored);
         }
     }
 }

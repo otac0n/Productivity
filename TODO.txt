@@ -1,7 +1,6 @@
 TODO: Add deletion support to the rule manager.
 TODO: Add re-ordering support to the rule manager.
 TODO: Use a syntax-highlighted editor.
-TODO: Show the overall productivity number on the productivity view.
 TODO: Show top-N unproductive tasks or time periods on the productivity view.
 TODO: Provide a way to export the productivity results.
 TODO: Add a "nag" plug-in.

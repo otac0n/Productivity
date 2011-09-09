@@ -34,6 +34,8 @@
             System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
             this.analysisWorker = new System.ComponentModel.BackgroundWorker();
+            this.scoreLabel = new System.Windows.Forms.Label();
+            this.timeScoredLabel = new System.Windows.Forms.Label();
             this.productivityBar = new Productivity.ProductivityBar();
             toolStrip = new System.Windows.Forms.ToolStrip();
             refreshButton = new System.Windows.Forms.ToolStripButton();
@@ -81,6 +83,8 @@
             // 
             // toolStripContainer.ContentPanel
             // 
+            toolStripContainer.ContentPanel.Controls.Add(this.timeScoredLabel);
+            toolStripContainer.ContentPanel.Controls.Add(this.scoreLabel);
             toolStripContainer.ContentPanel.Controls.Add(this.productivityBar);
             toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 237);
             toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -98,6 +102,25 @@
             // 
             this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
             this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
+            // 
+            // scoreLabel
+            // 
+            this.scoreLabel.AutoSize = true;
+            this.scoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Location = new System.Drawing.Point(12, 16);
+            this.scoreLabel.Name = "scoreLabel";
+            this.scoreLabel.Size = new System.Drawing.Size(98, 31);
+            this.scoreLabel.TabIndex = 1;
+            this.scoreLabel.Text = "0.00 %";
+            // 
+            // timeScoredLabel
+            // 
+            this.timeScoredLabel.AutoSize = true;
+            this.timeScoredLabel.Location = new System.Drawing.Point(15, 88);
+            this.timeScoredLabel.Name = "timeScoredLabel";
+            this.timeScoredLabel.Size = new System.Drawing.Size(32, 13);
+            this.timeScoredLabel.TabIndex = 2;
+            this.timeScoredLabel.Text = "0 min";
             // 
             // productivityBar
             // 
@@ -125,6 +148,7 @@
             toolStrip.ResumeLayout(false);
             toolStrip.PerformLayout();
             toolStripContainer.ContentPanel.ResumeLayout(false);
+            toolStripContainer.ContentPanel.PerformLayout();
             toolStripContainer.TopToolStripPanel.ResumeLayout(false);
             toolStripContainer.TopToolStripPanel.PerformLayout();
             toolStripContainer.ResumeLayout(false);
@@ -137,6 +161,8 @@
 
         private ProductivityBar productivityBar;
         private System.ComponentModel.BackgroundWorker analysisWorker;
+        private System.Windows.Forms.Label timeScoredLabel;
+        private System.Windows.Forms.Label scoreLabel;
 
     }
 }
