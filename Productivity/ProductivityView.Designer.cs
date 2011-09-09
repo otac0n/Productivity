@@ -33,10 +33,16 @@
             System.Windows.Forms.ToolStripButton manageRulesButton;
             System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
-            this.analysisWorker = new System.ComponentModel.BackgroundWorker();
-            this.scoreLabel = new System.Windows.Forms.Label();
             this.timeScoredLabel = new System.Windows.Forms.Label();
+            this.scoreLabel = new System.Windows.Forms.Label();
+            this.analysisWorker = new System.ComponentModel.BackgroundWorker();
+            this.tabView = new System.Windows.Forms.TabControl();
+            this.unclassifiedEventsTab = new System.Windows.Forms.TabPage();
+            this.unclassifiedEventsList = new System.Windows.Forms.ListView();
             this.productivityBar = new Productivity.ProductivityBar();
+            this.startTimeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.endTimeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.dataColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             toolStrip = new System.Windows.Forms.ToolStrip();
             refreshButton = new System.Windows.Forms.ToolStripButton();
             manageRulesButton = new System.Windows.Forms.ToolStripButton();
@@ -45,6 +51,8 @@
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
+            this.tabView.SuspendLayout();
+            this.unclassifiedEventsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -83,14 +91,15 @@
             // 
             // toolStripContainer.ContentPanel
             // 
+            toolStripContainer.ContentPanel.Controls.Add(this.tabView);
             toolStripContainer.ContentPanel.Controls.Add(this.timeScoredLabel);
             toolStripContainer.ContentPanel.Controls.Add(this.scoreLabel);
             toolStripContainer.ContentPanel.Controls.Add(this.productivityBar);
-            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 237);
+            toolStripContainer.ContentPanel.Size = new System.Drawing.Size(572, 333);
             toolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             toolStripContainer.Location = new System.Drawing.Point(0, 0);
             toolStripContainer.Name = "toolStripContainer";
-            toolStripContainer.Size = new System.Drawing.Size(572, 262);
+            toolStripContainer.Size = new System.Drawing.Size(572, 358);
             toolStripContainer.TabIndex = 0;
             toolStripContainer.Text = "toolStripContainer";
             // 
@@ -98,10 +107,14 @@
             // 
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
-            // analysisWorker
+            // timeScoredLabel
             // 
-            this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
-            this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
+            this.timeScoredLabel.AutoSize = true;
+            this.timeScoredLabel.Location = new System.Drawing.Point(15, 88);
+            this.timeScoredLabel.Name = "timeScoredLabel";
+            this.timeScoredLabel.Size = new System.Drawing.Size(32, 13);
+            this.timeScoredLabel.TabIndex = 2;
+            this.timeScoredLabel.Text = "0 min";
             // 
             // scoreLabel
             // 
@@ -113,14 +126,47 @@
             this.scoreLabel.TabIndex = 1;
             this.scoreLabel.Text = "0.00 %";
             // 
-            // timeScoredLabel
+            // analysisWorker
             // 
-            this.timeScoredLabel.AutoSize = true;
-            this.timeScoredLabel.Location = new System.Drawing.Point(15, 88);
-            this.timeScoredLabel.Name = "timeScoredLabel";
-            this.timeScoredLabel.Size = new System.Drawing.Size(32, 13);
-            this.timeScoredLabel.TabIndex = 2;
-            this.timeScoredLabel.Text = "0 min";
+            this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
+            this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
+            // 
+            // tabView
+            // 
+            this.tabView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabView.Controls.Add(this.unclassifiedEventsTab);
+            this.tabView.Location = new System.Drawing.Point(13, 120);
+            this.tabView.Name = "tabView";
+            this.tabView.SelectedIndex = 0;
+            this.tabView.Size = new System.Drawing.Size(547, 201);
+            this.tabView.TabIndex = 3;
+            // 
+            // unclassifiedEventsTab
+            // 
+            this.unclassifiedEventsTab.Controls.Add(this.unclassifiedEventsList);
+            this.unclassifiedEventsTab.Location = new System.Drawing.Point(4, 22);
+            this.unclassifiedEventsTab.Name = "unclassifiedEventsTab";
+            this.unclassifiedEventsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.unclassifiedEventsTab.Size = new System.Drawing.Size(539, 175);
+            this.unclassifiedEventsTab.TabIndex = 0;
+            this.unclassifiedEventsTab.Text = "Unclassified";
+            this.unclassifiedEventsTab.UseVisualStyleBackColor = true;
+            // 
+            // unclassifiedEventsList
+            // 
+            this.unclassifiedEventsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.startTimeColumn,
+            this.endTimeColumn,
+            this.dataColumn});
+            this.unclassifiedEventsList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.unclassifiedEventsList.Location = new System.Drawing.Point(3, 3);
+            this.unclassifiedEventsList.Name = "unclassifiedEventsList";
+            this.unclassifiedEventsList.Size = new System.Drawing.Size(533, 169);
+            this.unclassifiedEventsList.TabIndex = 0;
+            this.unclassifiedEventsList.UseCompatibleStateImageBehavior = false;
+            this.unclassifiedEventsList.View = System.Windows.Forms.View.Details;
             // 
             // productivityBar
             // 
@@ -134,11 +180,23 @@
             this.productivityBar.TabIndex = 0;
             this.productivityBar.TimeSpan = System.TimeSpan.Parse("1.00:00:00");
             // 
+            // startTimeColumn
+            // 
+            this.startTimeColumn.Text = "Start Time";
+            // 
+            // endTimeColumn
+            // 
+            this.endTimeColumn.Text = "End Time";
+            // 
+            // dataColumn
+            // 
+            this.dataColumn.Text = "Data";
+            // 
             // ProductivityView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(572, 262);
+            this.ClientSize = new System.Drawing.Size(572, 358);
             this.Controls.Add(toolStripContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProductivityView";
@@ -153,6 +211,8 @@
             toolStripContainer.TopToolStripPanel.PerformLayout();
             toolStripContainer.ResumeLayout(false);
             toolStripContainer.PerformLayout();
+            this.tabView.ResumeLayout(false);
+            this.unclassifiedEventsTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -163,6 +223,12 @@
         private System.ComponentModel.BackgroundWorker analysisWorker;
         private System.Windows.Forms.Label timeScoredLabel;
         private System.Windows.Forms.Label scoreLabel;
+        private System.Windows.Forms.TabControl tabView;
+        private System.Windows.Forms.TabPage unclassifiedEventsTab;
+        private System.Windows.Forms.ListView unclassifiedEventsList;
+        private System.Windows.Forms.ColumnHeader startTimeColumn;
+        private System.Windows.Forms.ColumnHeader endTimeColumn;
+        private System.Windows.Forms.ColumnHeader dataColumn;
 
     }
 }

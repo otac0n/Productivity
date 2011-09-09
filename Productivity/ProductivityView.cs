@@ -82,6 +82,46 @@
                 var score = CalculateOverall(result);
                 this.scoreLabel.Text = score.Item1.ToString("P");
                 this.timeScoredLabel.Text = FormatTime(score.Item2);
+
+                this.unclassifiedEventsList.Items.Clear();
+                this.unclassifiedEventsList.Groups.Clear();
+                var unclassified = result.Where(s => s.IsUnclassified).ToList();
+                if (unclassified.Count > 0)
+                {
+                    var startTime = unclassified.Min(s => s.StartTime);
+                    var endTime = unclassified.Max(s => s.EndTime);
+
+                    HashSet<Event> events;
+                    using (var db = new EventsConnection())
+                    {
+                        events = new HashSet<Event>(db.Events.Where(s => s.EndTime > startTime && s.StartTime < endTime));
+                    }
+
+                    var unclassifiedEvents = new HashSet<Event>();
+                    foreach (var segment in unclassified)
+                    {
+                        foreach (var evt in events.Where(s => s.EndTime > segment.StartTime && s.StartTime < segment.EndTime).ToList())
+                        {
+                            unclassifiedEvents.Add(evt);
+                            events.Remove(evt);
+                        }
+                    }
+
+                    var groups = new Dictionary<string, ListViewGroup>();
+                    foreach (var evt in unclassifiedEvents.OrderBy(evt => evt.StartTime))
+                    {
+                        ListViewGroup group;
+                        if (!groups.TryGetValue(evt.Type, out group))
+                        {
+                            group = new ListViewGroup(evt.Type);
+                            this.unclassifiedEventsList.Groups.Add(group);
+                            groups.Add(evt.Type, group);
+                        }
+
+                        var item = new ListViewItem(new[] { evt.StartTime.ToString(), evt.EndTime.ToString(), evt.Data }, group);
+                        this.unclassifiedEventsList.Items.Add(item);
+                    }
+                }
             }
 
             this.Enabled = true;
