@@ -95,6 +95,7 @@
                         EndTime = span.endTime,
                         Description = "Unclassified",
                         Productivity = 0,
+                        IsUnclassified = true,
                     };
                 }
 
