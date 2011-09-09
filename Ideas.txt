@@ -4,7 +4,6 @@ Example Plugin Sources:
 	SVN
 
 Example Rule Set:
-	If the active application is 'devenv.exe' -> "Working on " + Regex(Title, "(?<project>.*?)(:? \(Running\))? - Microsoft Visual Studio")["project"]
 	If the active url matches "http://stackoverflow.com%', "http://programmers.stackexchange.com%', ... -> "Researching"
 	If mouse is not active and keyboard is not active -> "Idle"
 
@@ -31,6 +30,39 @@ if (lastStatus != null && lastStatus.StartTime >= currentPing.StartTime) {
 // -----------------------------------------------------------------------------
 var activeApp = current(e => e.Type == "ActiveApplicationSource");
 if (activeApp != null && activeApp.Data.fileName.EndsWith("devenv.exe")) {
+    var match = Regex.Match(
+        activeApp.Data.title,
+        @"^(?<project>.*?)( \(Running\))? - Microsoft Visual Studio");
+
+    if (match.Success) {
+        return "Working on project \"" + match.Groups["project"].Value + "\"";
+    }
+
+    return true;
+}
+// -----------------------------------------------------------------------------
+
+// --- (100%) ------------------------------------------------------------------
+// Using Git
+// -----------------------------------------------------------------------------
+var activeApp = current(e => e.Type == "ActiveApplicationSource");
+if (activeApp != null && activeApp.Data.fileName.EndsWith("GitExtensions.exe")) {
+    var match = Regex.Match(
+        activeApp.Data.title,
+        @"^(?<project>.*?) \(\w+\) - Git Extensions");
+
+    if (match.Success) {
+        return "Managing project \"" + match.Groups["project"].Value + "\"";
+    }
+
+    match = Regex.Match(
+        activeApp.Data.title,
+        @"^Commit to .*? \(.*?\\(?<project>[^\\]*)\\\)$");
+
+    if (match.Success) {
+        return "Committing to project \"" + match.Groups["project"].Value + "\"";
+    }
+
     return true;
 }
 // -----------------------------------------------------------------------------
