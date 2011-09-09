@@ -46,5 +46,10 @@
             ruleManager.ShowDialog(this);
             RefreshAnalysis();
         }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshAnalysis();
+        }
     }
 }

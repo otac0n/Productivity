@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.ToolStrip toolStrip;
-            System.Windows.Forms.ToolStripButton manageRulesButton;
             System.Windows.Forms.ToolStripContainer toolStripContainer;
+            System.Windows.Forms.ToolStripButton refreshButton;
+            System.Windows.Forms.ToolStripButton manageRulesButton;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
             this.productivityBar = new Productivity.ProductivityBar();
             toolStrip = new System.Windows.Forms.ToolStrip();
-            manageRulesButton = new System.Windows.Forms.ToolStripButton();
             toolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            refreshButton = new System.Windows.Forms.ToolStripButton();
+            manageRulesButton = new System.Windows.Forms.ToolStripButton();
             toolStrip.SuspendLayout();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -46,21 +48,12 @@
             // 
             toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            refreshButton,
             manageRulesButton});
             toolStrip.Location = new System.Drawing.Point(3, 0);
             toolStrip.Name = "toolStrip";
-            toolStrip.Size = new System.Drawing.Size(35, 25);
+            toolStrip.Size = new System.Drawing.Size(89, 25);
             toolStrip.TabIndex = 0;
-            // 
-            // manageRulesButton
-            // 
-            manageRulesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            manageRulesButton.Image = global::Productivity.Properties.Resources.Settings;
-            manageRulesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            manageRulesButton.Name = "manageRulesButton";
-            manageRulesButton.Size = new System.Drawing.Size(23, 22);
-            manageRulesButton.Text = "Manage Rules";
-            manageRulesButton.Click += new System.EventHandler(this.manageRulesButton_Click);
             // 
             // toolStripContainer
             // 
@@ -80,9 +73,29 @@
             // 
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
+            // refreshButton
+            // 
+            refreshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            refreshButton.Image = global::Productivity.Properties.Resources.Refresh;
+            refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            refreshButton.Name = "refreshButton";
+            refreshButton.Size = new System.Drawing.Size(23, 22);
+            refreshButton.Text = "Refresh";
+            refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // manageRulesButton
+            // 
+            manageRulesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            manageRulesButton.Image = global::Productivity.Properties.Resources.Settings;
+            manageRulesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            manageRulesButton.Name = "manageRulesButton";
+            manageRulesButton.Size = new System.Drawing.Size(23, 22);
+            manageRulesButton.Text = "Manage Rules";
+            manageRulesButton.Click += new System.EventHandler(this.manageRulesButton_Click);
+            // 
             // productivityBar
             // 
-            this.productivityBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.productivityBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.productivityBar.Location = new System.Drawing.Point(12, 50);
             this.productivityBar.Name = "productivityBar";
