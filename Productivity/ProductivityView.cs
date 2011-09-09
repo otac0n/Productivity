@@ -94,7 +94,7 @@
                     HashSet<Event> events;
                     using (var db = new EventsConnection())
                     {
-                        events = new HashSet<Event>(db.Events.Where(s => s.EndTime > startTime && s.StartTime < endTime));
+                        events = new HashSet<Event>(db.Events.Where(s => s.EndTime > startTime && s.StartTime < endTime && s.Type != "PingEventSource"));
                     }
 
                     var unclassifiedEvents = new HashSet<Event>();
