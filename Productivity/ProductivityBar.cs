@@ -112,14 +112,13 @@ namespace Productivity
                         {
                             // Re-calculate the bar's time to compensate for rounding error.
                             barMs = unkonwnMs + productiveMs + unproductiveMs;
-                            var alpha = 1.0 - (unkonwnMs / barMs);
+                            var unknown = unkonwnMs / barMs;
 
                             // Base the colors on only the portion of time that is productive or unproductive.
                             barMs = productiveMs + unproductiveMs;
                             var productive = productiveMs / barMs;
-                            var unproductive = unproductiveMs / barMs;
 
-                            var pen = new Pen(Color.FromArgb((int)(255 * alpha), (int)(255 * unproductive), (int)(255 * productive), 0));
+                            var pen = new Pen(GetColorForProductivity(unknown, productive));
                             g.DrawLine(pen, x, top, x, bottom);
                         }
                     }
@@ -127,6 +126,16 @@ namespace Productivity
             }
 
             g.DrawRectangle(Pens.Black, new Rectangle(0, 0, this.Width - 1, this.Height - 1));
+        }
+
+        private Color GetColorForProductivity(double unknown, double productive)
+        {
+            var a = (int)(256 * (1.0 - unknown)).Clamp(0, 255);
+            var r = (int)(512 - 512 * productive).Clamp(0, 255);
+            var g = (int)(512 * productive).Clamp(0, 255);
+            var b = 0;
+
+            return Color.FromArgb(a, r, g, b);
         }
 
         private List<TimelineSegment> FindSegments(DateTime startTime, DateTime endTime)
