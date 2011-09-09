@@ -13,11 +13,8 @@
 
     public partial class ProductivityView : Form
     {
-        private EventsConnection db;
-
         public ProductivityView()
         {
-            this.db = new EventsConnection();
             InitializeComponent();
 
             var startTime = DateTime.Today.ToUniversalTime();
@@ -40,8 +37,12 @@
 
         private void manageRulesButton_Click(object sender, EventArgs e)
         {
-            var ruleManager = new RuleManager(this.db);
-            ruleManager.ShowDialog(this);
+            using (var db = new EventsConnection())
+            {
+                var ruleManager = new RuleManager(db);
+                ruleManager.ShowDialog(this);
+            }
+
             RefreshAnalysis();
         }
 
@@ -64,8 +65,11 @@
             var startTime = this.productivityBar.StartTime;
             var endTime = startTime + this.productivityBar.TimeSpan;
 
-            var timelineAnalyzer = new TimelineAnalyzer(this.db);
-            e.Result = timelineAnalyzer.Analyze(startTime, endTime);
+            using (var db = new EventsConnection())
+            {
+                var timelineAnalyzer = new TimelineAnalyzer(db);
+                e.Result = timelineAnalyzer.Analyze(startTime, endTime);
+            }
         }
 
         private void analysisWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
