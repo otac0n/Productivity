@@ -8,17 +8,14 @@
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
-    using Productivity.Models;
     using Productivity.Analysis;
+    using Productivity.Models;
 
     public partial class ProductivityView : Form
     {
         public ProductivityView()
         {
             InitializeComponent();
-
-            var startTime = DateTime.Today.ToUniversalTime();
-            this.productivityBar.StartTime = startTime;
         }
 
         private void ProductivityView_Shown(object sender, EventArgs e)
@@ -55,6 +52,7 @@
         {
             if (this.Enabled)
             {
+                this.productivityBar.StartTime = DateTime.Today.ToUniversalTime();
                 this.Enabled = false;
                 this.analysisWorker.RunWorkerAsync();
             }
