@@ -33,16 +33,16 @@
             System.Windows.Forms.ToolStripButton manageRulesButton;
             System.Windows.Forms.ToolStripContainer toolStripContainer;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityView));
-            this.timeScoredLabel = new System.Windows.Forms.Label();
-            this.scoreLabel = new System.Windows.Forms.Label();
-            this.analysisWorker = new System.ComponentModel.BackgroundWorker();
             this.tabView = new System.Windows.Forms.TabControl();
             this.unclassifiedEventsTab = new System.Windows.Forms.TabPage();
             this.unclassifiedEventsList = new System.Windows.Forms.ListView();
-            this.productivityBar = new Productivity.ProductivityBar();
             this.startTimeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.endTimeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.timeScoredLabel = new System.Windows.Forms.Label();
+            this.scoreLabel = new System.Windows.Forms.Label();
+            this.productivityBar = new Productivity.ProductivityBar();
+            this.analysisWorker = new System.ComponentModel.BackgroundWorker();
             toolStrip = new System.Windows.Forms.ToolStrip();
             refreshButton = new System.Windows.Forms.ToolStripButton();
             manageRulesButton = new System.Windows.Forms.ToolStripButton();
@@ -107,30 +107,6 @@
             // 
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
-            // timeScoredLabel
-            // 
-            this.timeScoredLabel.AutoSize = true;
-            this.timeScoredLabel.Location = new System.Drawing.Point(15, 88);
-            this.timeScoredLabel.Name = "timeScoredLabel";
-            this.timeScoredLabel.Size = new System.Drawing.Size(32, 13);
-            this.timeScoredLabel.TabIndex = 2;
-            this.timeScoredLabel.Text = "0 min";
-            // 
-            // scoreLabel
-            // 
-            this.scoreLabel.AutoSize = true;
-            this.scoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scoreLabel.Location = new System.Drawing.Point(12, 16);
-            this.scoreLabel.Name = "scoreLabel";
-            this.scoreLabel.Size = new System.Drawing.Size(98, 31);
-            this.scoreLabel.TabIndex = 1;
-            this.scoreLabel.Text = "0.00 %";
-            // 
-            // analysisWorker
-            // 
-            this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
-            this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
-            // 
             // tabView
             // 
             this.tabView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -161,12 +137,44 @@
             this.endTimeColumn,
             this.dataColumn});
             this.unclassifiedEventsList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.unclassifiedEventsList.FullRowSelect = true;
             this.unclassifiedEventsList.Location = new System.Drawing.Point(3, 3);
             this.unclassifiedEventsList.Name = "unclassifiedEventsList";
             this.unclassifiedEventsList.Size = new System.Drawing.Size(533, 169);
             this.unclassifiedEventsList.TabIndex = 0;
             this.unclassifiedEventsList.UseCompatibleStateImageBehavior = false;
             this.unclassifiedEventsList.View = System.Windows.Forms.View.Details;
+            // 
+            // startTimeColumn
+            // 
+            this.startTimeColumn.Text = "Start Time";
+            // 
+            // endTimeColumn
+            // 
+            this.endTimeColumn.Text = "End Time";
+            // 
+            // dataColumn
+            // 
+            this.dataColumn.Text = "Data";
+            // 
+            // timeScoredLabel
+            // 
+            this.timeScoredLabel.AutoSize = true;
+            this.timeScoredLabel.Location = new System.Drawing.Point(15, 88);
+            this.timeScoredLabel.Name = "timeScoredLabel";
+            this.timeScoredLabel.Size = new System.Drawing.Size(32, 13);
+            this.timeScoredLabel.TabIndex = 2;
+            this.timeScoredLabel.Text = "0 min";
+            // 
+            // scoreLabel
+            // 
+            this.scoreLabel.AutoSize = true;
+            this.scoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Location = new System.Drawing.Point(12, 16);
+            this.scoreLabel.Name = "scoreLabel";
+            this.scoreLabel.Size = new System.Drawing.Size(98, 31);
+            this.scoreLabel.TabIndex = 1;
+            this.scoreLabel.Text = "0.00 %";
             // 
             // productivityBar
             // 
@@ -180,17 +188,10 @@
             this.productivityBar.TabIndex = 0;
             this.productivityBar.TimeSpan = System.TimeSpan.Parse("1.00:00:00");
             // 
-            // startTimeColumn
+            // analysisWorker
             // 
-            this.startTimeColumn.Text = "Start Time";
-            // 
-            // endTimeColumn
-            // 
-            this.endTimeColumn.Text = "End Time";
-            // 
-            // dataColumn
-            // 
-            this.dataColumn.Text = "Data";
+            this.analysisWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.analysisWorker_DoWork);
+            this.analysisWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.analysisWorker_RunWorkerCompleted);
             // 
             // ProductivityView
             // 
