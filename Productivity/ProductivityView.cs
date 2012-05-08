@@ -122,6 +122,11 @@
                 }
             }
 
+            this.unclassifiedEventsList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            foreach (ColumnHeader column in this.unclassifiedEventsList.Columns)
+            {
+                column.Width = Math.Max(column.Width, 60);
+            }
             this.Enabled = true;
         }
 
