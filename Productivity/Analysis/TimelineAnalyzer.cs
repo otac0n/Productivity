@@ -20,19 +20,19 @@
 
         internal List<TimelineSegment> Analyze(DateTime startTime, DateTime endTime)
         {
+            Func<Event, DynamicEvent> convertEvent = e => new DynamicEvent(e.StartTime, e.EndTime, e.Data, e.Type);
+
             var events = (from e in this.db.Events
                           where e.EndTime >= startTime
                           where e.StartTime <= endTime
                           select e)
                          .AsEnumerable()
-                         .Select(e => new DynamicEvent(e.StartTime, e.EndTime, e.Data, e.Type))
+                         .Select(convertEvent)
                          .ToList();
 
-            var times = (from e in events
-                         select e.StartTime).Union
-                        (from e in events
-                         select e.EndTime).Union
-                        (new[] { startTime, endTime }).OrderBy(t => t).ToList();
+            var times = new SortedSet<DateTime>(new[] { startTime, endTime });
+            times.UnionWith(events.Select(e => e.StartTime));
+            times.UnionWith(events.Select(e => e.EndTime));
 
             var spans = times.Zip(times.Skip(1), (start, end) => new { startTime = start, endTime = end }).ToList();
 
@@ -50,9 +50,17 @@
                 {
                     return (from e in events
                             where e.StartTime <= span.startTime
-                            where predicate(e)
                             orderby e.StartTime descending
-                            select e).FirstOrDefault();
+                            where predicate(e)
+                            select e).FirstOrDefault() ??
+                           (from e in this.db.Events
+                            where e.StartTime <= span.startTime
+                            orderby e.StartTime descending
+                            select e)
+                           .AsEnumerable()
+                           .Select(convertEvent)
+                           .Where(e => predicate(e))
+                           .FirstOrDefault();
                 };
 
                 Func<Predicate<DynamicEvent>, DynamicEvent> current = predicate =>
@@ -61,8 +69,7 @@
                             where e.StartTime <= span.startTime
                             where e.EndTime >= span.endTime
                             where predicate(e)
-                            orderby e.StartTime descending
-                            orderby e.EndTime ascending
+                            orderby e.StartTime descending, e.EndTime ascending
                             select e).FirstOrDefault();
                 };
 
