@@ -33,6 +33,7 @@
             var times = new SortedSet<DateTime>(new[] { startTime, endTime });
             times.UnionWith(events.Select(e => e.StartTime));
             times.UnionWith(events.Select(e => e.EndTime));
+            times = times.GetViewBetween(startTime, endTime);
 
             var spans = times.Zip(times.Skip(1), (start, end) => new { startTime = start, endTime = end }).ToList();
 
