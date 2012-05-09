@@ -13,7 +13,7 @@ namespace Productivity.Analysis
 
         public override string ToString()
         {
-            return string.Format("{0} - {1} ({2}): {3}", this.StartTime, this.EndTime, this.Productivity.HasValue ? this.Productivity.ToString() + "%" : "untracked", this.Description);
+            return string.Format("{0} - {1} ({2}): {3}", this.StartTime.ToLocalTime(), this.EndTime.ToLocalTime(), this.Productivity.HasValue ? this.Productivity.ToString() + "%" : "untracked", this.Description);
         }
     }
 }

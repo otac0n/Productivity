@@ -116,7 +116,7 @@
                             groups.Add(evt.Type, group);
                         }
 
-                        var item = new ListViewItem(new[] { evt.StartTime.ToString(), evt.EndTime.ToString(), evt.Data }, group);
+                        var item = new ListViewItem(new[] { evt.StartTime.ToLocalTime().ToString(), evt.EndTime.ToLocalTime().ToString(), evt.Data }, group);
                         this.unclassifiedEventsList.Items.Add(item);
                     }
                 }
